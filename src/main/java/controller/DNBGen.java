@@ -3,6 +3,8 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -13,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -21,6 +24,14 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+
+import utils.CommonUtils;
+
+import javax.swing.JPopupMenu;
+
+import java.awt.Component;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 /*
  * ============================================================
@@ -44,12 +55,20 @@ import org.apache.log4j.Logger;
  */
 public class DNBGen extends JFrame {
 	
+	private  final  String classPath = this.getClass().getResource("/").getPath();
 	private static final Logger log = Logger.getLogger(DNBGen.class);
 	private JPanel contentPane;
 	private JTextField txtWorkSpace;
 	private JFileChooser fileChooser = new JFileChooser() ;
 	private JTextField txtCaseFile;
 	private JTextField txtControlFile;
+	private JTextField txtPeriod;
+	private JTextField txtPeriodSampleCount;
+	private JTextField txtSdThreshold;
+	private JTextField txtPccOutAmount;
+	private JTextField txtCores;
+	private JTextField txtClusterH;
+	private CIGrowthPane jpCIGrowth = null;
 
 	/**
 	 * Launch the application.
@@ -62,7 +81,7 @@ public class DNBGen extends JFrame {
 					DNBGen frame = new DNBGen();
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					log.error("new frame failed!", e);
 				}
 			}
 		});
@@ -88,6 +107,37 @@ public class DNBGen extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		
+		dnbGenTab(tabbedPane);
+		
+		try {
+			jpCIGrowth = new CIGrowthPane();
+		} catch (IOException e) {
+			log.error("draw ci growth failed!", e);
+		}
+		tabbedPane.addTab("综合指数折线图", null, jpCIGrowth, null);
+		
+		JPopupMenu popupMenu = new JPopupMenu();
+		addPopup(jpCIGrowth, popupMenu);
+		
+		JMenuItem mntmSaveAs = new JMenuItem("另存为");
+		mntmSaveAs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					saveFile(jpCIGrowth);
+				} catch (IOException e1) {
+					log.error("create file error!", e1);
+				}
+			}
+		});
+		popupMenu.add(mntmSaveAs);
+
+	}
+
+	/**
+	 * 参数输入tab相关的方法
+	 * @param tabbedPane
+	 */
+	public void dnbGenTab(JTabbedPane tabbedPane) {
 		JPanel jpDNBGen = new JPanel();
 		tabbedPane.addTab("参数输入", null, jpDNBGen, null);
 		
@@ -109,14 +159,7 @@ public class DNBGen extends JFrame {
 			}
 		});
 		
-		JLabel lblCase = new JLabel("Case文件:");
-		JLabel lblControl = new JLabel("Control文件:");
 		
-		txtCaseFile = new JTextField();
-		txtCaseFile.setColumns(10);
-		
-		txtControlFile = new JTextField();
-		txtControlFile.setColumns(10);
 		
 		final JButton btnCase = new JButton("选择");
 		btnCase.addMouseListener(new MouseAdapter() {
@@ -140,20 +183,32 @@ public class DNBGen extends JFrame {
 			}
 		});
 		
+		JLabel lblCase = new JLabel("Case文件:");
+		JLabel lblControl = new JLabel("Control文件:");
 		JLabel lblPeriod= new JLabel("总时期数(Period): ");
 		JLabel lblPeriodSampleCount= new JLabel("每个时期样本数: ");
 		JLabel lblSdThreshold= new JLabel("标准差筛选阈值: ");
 		JLabel lblClusterH= new JLabel("层次聚类剪枝H值: ");
 		JLabel lblPccOutAmount= new JLabel("模块间的需要计算的边数: ");
-		JLabel lblCores= new JLabel("CPU加速所使用的核心数: ");
+		JLabel lblCores_1= new JLabel("CPU加速所使用的核心数: ");
 		
-		JTextField txtPeriod= new JTextField();
-		JTextField txtPeriodSampleCount= new JTextField();
-		JTextField txtSdThreshold= new JTextField();
-		JTextField txtClusterH= new JTextField();
-		JTextField txtPccOutAmount= new JTextField();
-		JTextField txtCores= new JTextField();
+		txtCaseFile = new JTextField();
+		txtControlFile = new JTextField();
+		txtPeriod= new JTextField();
+		txtPeriod.setText("5");
+		txtPeriodSampleCount= new JTextField();
+		txtPeriodSampleCount.setText("5");
+		txtSdThreshold= new JTextField();
+		txtSdThreshold.setText("0.01");
+		txtClusterH= new JTextField();
+		txtClusterH.setText("0.75");
+		txtPccOutAmount= new JTextField();
+		txtPccOutAmount.setText("50");
+		txtCores= new JTextField();
+		txtCores.setText("6");
 
+		txtCaseFile.setColumns(10);
+		txtControlFile.setColumns(10);
 		txtPeriod.setColumns(10);
 		txtPeriodSampleCount.setColumns(10);
 		txtSdThreshold.setColumns(10);
@@ -165,17 +220,85 @@ public class DNBGen extends JFrame {
 		btnDnbgen.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				dnbGenMain();
 			}
 		});
 		
 		dnbGenLayout(jpDNBGen, lblWorkSpace, lblCase, lblControl, lblPeriod,
 				lblPeriodSampleCount, lblSdThreshold, lblClusterH,
-				lblPccOutAmount, lblCores, txtPeriod, txtPeriodSampleCount,
-				txtSdThreshold, txtClusterH, txtPccOutAmount, txtCores,
+				lblPccOutAmount, lblCores_1,
 				btnWorkSpace, btnCase, btnControl, btnDnbgen);
-
 	}
 
+	
+
+	/**
+	 * add menu for application
+	 * @param menuBar menu bar
+	 */
+	private void setMenu(JMenuBar menuBar) {
+		//File
+		JMenu mnFile = new JMenu("File");
+		menuBar.add(mnFile);
+		JMenuItem miOpen = new JMenuItem("Open");
+		JMenuItem miClose = new JMenuItem("Close");
+		mnFile.add(miOpen);
+		mnFile.add(miClose);
+		
+		//Help
+		JMenu mnHelp = new JMenu("Help");
+		menuBar.add(mnHelp);
+		JMenuItem miAbout = new JMenuItem("About");
+		mnHelp.add(miAbout);
+		
+	}
+
+	/**
+	 * the main method of DNB generate
+	 */
+	public void dnbGenMain() {
+		String corePath = classPath + "core/";
+		String addExeModCmd = "bash " + corePath + "addExeModAndRemoveOldFiles.sh " + corePath;
+		log.info("addExeModCmd: " + addExeModCmd);
+		CommonUtils.execShellCmd(addExeModCmd);
+
+		String basePath = txtWorkSpace.getText() + File.separator;
+		String caseFilePath = txtCaseFile.getText();
+		String controlFilePath = txtControlFile.getText();
+		String periodCount = txtPeriod.getText();
+		String periodSampleCount = txtPeriodSampleCount.getText();
+		String featuresSdThreshold = txtSdThreshold.getText();
+		String clusterHclustH = txtClusterH.getText();
+		String pccOutAmount = txtPccOutAmount.getText();
+		String cores = txtCores.getText();
+
+		StringBuffer gdmCmd = new StringBuffer();
+		gdmCmd.append(classPath).append("core/gdm4Par.R ")
+				.append(" -p ").append(basePath)
+				.append("  --case.file.path  ").append(caseFilePath)
+				.append("  --period.count   ").append(periodCount)
+				.append("  --period.sample.count  ")
+				.append(periodSampleCount)
+				.append(" --features.sd.threshold  ")
+				.append(featuresSdThreshold)
+				.append(" --cluster.hclust.h  ").append(clusterHclustH)
+				.append(" --pcc.out.amount  ").append(pccOutAmount)
+				.append(" --cores ").append(cores);
+		if (!controlFilePath.isEmpty()) {
+			gdmCmd.append("  --control.file.path  ").append(
+					controlFilePath);
+		}
+
+		log.info("gdmCmd:" + gdmCmd.toString());
+		CommonUtils.execShellCmd(gdmCmd.toString());
+
+		// store cores, periodCount and periodSampleCount into file
+		String propPath = classPath + "tempVariables.properties";
+		CommonUtils.storeValueByKeyFromConfig("cores", cores, propPath);
+		CommonUtils.storeValueByKeyFromConfig("period.count", periodCount, propPath);
+		CommonUtils.storeValueByKeyFromConfig("period.sample.count", periodSampleCount, propPath);
+	}
+	
 	/**
 	 * DNBGen TabbedPane Layout
 	 * @param jpDNBGen
@@ -188,12 +311,6 @@ public class DNBGen extends JFrame {
 	 * @param lblClusterH
 	 * @param lblPccOutAmount
 	 * @param lblCores
-	 * @param txtPeriod
-	 * @param txtPeriodSampleCount
-	 * @param txtSdThreshold
-	 * @param txtClusterH
-	 * @param txtPccOutAmount
-	 * @param txtCores
 	 * @param btnWorkSpace
 	 * @param btnCase
 	 * @param btnControl
@@ -203,9 +320,6 @@ public class DNBGen extends JFrame {
 			JLabel lblCase, JLabel lblControl, JLabel lblPeriod,
 			JLabel lblPeriodSampleCount, JLabel lblSdThreshold,
 			JLabel lblClusterH, JLabel lblPccOutAmount, JLabel lblCores,
-			JTextField txtPeriod, JTextField txtPeriodSampleCount,
-			JTextField txtSdThreshold, JTextField txtClusterH,
-			JTextField txtPccOutAmount, JTextField txtCores,
 			JButton btnWorkSpace, JButton btnCase, JButton btnControl,
 			JButton btnDnbgen) {
 		GroupLayout gl_jpDNBGen = new GroupLayout(jpDNBGen);
@@ -312,26 +426,44 @@ public class DNBGen extends JFrame {
 		);
 		jpDNBGen.setLayout(gl_jpDNBGen);
 	}
-
 	/**
-	 * add menu for application
-	 * @param menuBar menu bar
+	 * 保存文件
+	 * @throws IOException 
+	 * 
 	 */
-	private void setMenu(JMenuBar menuBar) {
-		//File
-		JMenu mnFile = new JMenu("File");
-		menuBar.add(mnFile);
-		JMenuItem miOpen = new JMenuItem("Open");
-		JMenuItem miClose = new JMenuItem("Close");
-		mnFile.add(miOpen);
-		mnFile.add(miClose);
-		
-		//Help
-		JMenu mnHelp = new JMenu("Help");
-		menuBar.add(mnHelp);
-		JMenuItem miAbout = new JMenuItem("About");
-		mnHelp.add(miAbout);
-		
+	public void saveFile(Component parent) throws IOException {
+		int operatre = fileChooser.showSaveDialog(parent);
+		if (operatre == JFileChooser.APPROVE_OPTION) {
+			File saveFile = fileChooser.getSelectedFile();
+			if (!saveFile.exists()) {
+				saveFile.createNewFile();
+			}else {
+				int dlgOperate = JOptionPane.showConfirmDialog(fileChooser, "文件已存在,是否覆盖?");
+				if (dlgOperate == JOptionPane.OK_OPTION) {
+					saveFile.delete();
+					saveFile.createNewFile();
+				}
+			}
+			((CIGrowthPane)parent) .save(saveFile);
+		}
+	}
+
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
 	}
 }
 
