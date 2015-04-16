@@ -19,6 +19,9 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+
 /*
  * ============================================================
  * The SSE USTC Software License
@@ -40,7 +43,8 @@ import javax.swing.border.EmptyBorder;
  *
  */
 public class DNBGen extends JFrame {
-
+	
+	private static final Logger log = Logger.getLogger(DNBGen.class);
 	private JPanel contentPane;
 	private JTextField txtWorkSpace;
 	private JFileChooser fileChooser = new JFileChooser() ;
@@ -51,10 +55,11 @@ public class DNBGen extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		BasicConfigurator.configure();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					DNBGen1 frame = new DNBGen1();
+					DNBGen frame = new DNBGen();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
