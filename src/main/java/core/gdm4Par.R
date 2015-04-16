@@ -10,10 +10,10 @@ library(doParallel)
 
 BASE.PATH <- "/host/data/"
 # BASE.PATH <- "./"
-CASE.FILE.NAME <- "liver_case_data.txt"
-CONTROL.FILE.NAME <- "liver_control_data.txt"
-# CASE.FILE.NAME <- NULL
-# CONTROL.FILE.NAME <- NULL
+# CASE.FILE.PATH <- "/host/data//sourceData/liver_case_data.txt"
+# CONTROL.FILE.PATH <- "/host/data//sourceData/liver_control_data.txt"
+CASE.FILE.PATH <- NULL
+CONTROL.FILE.PATH <- NULL
 
 
 # FILE.NAME <- "GSE64538_labeled.txt"
@@ -45,8 +45,8 @@ set.key.value  <- function(key,value){
   switch(key,
          "-p" = ,
          "--base.path" = BASE.PATH <<- value,
-         "--case.file.name" = CASE.FILE.NAME <<- value,
-         "--control.file.name" = CONTROL.FILE.NAME <<- value,
+         "--case.file.path" = CASE.FILE.PATH <<- value,
+         "--control.file.path" = CONTROL.FILE.PATH <<- value,
          "--period.count" = PERIOD.COUNT <<- as.integer(value),
          "--period.sample.count" = PERIOD.SAMPLE.COUNT <<- as.integer(value),
          "--features.sd.threshold" = FEATURES.SD.THRESHOLD <<- as.numeric(value),
@@ -58,16 +58,16 @@ set.key.value  <- function(key,value){
 
 print.usage <- function(){
   cat("Usage: gdm4Par.R [-h/--help |-p/--base.path directory] \n
-      [-case.file.name file] [-control.file.name file]  \n
+      [-case.file.path file] [-control.file.path file]  \n
       [--period.count number] [--period.sample.count number]  \n
       [--features.sd.threshold float] [--cluster.hclust.h float] \n
       [--pcc.out.amount number] [cores number]\n")
   cat("Details:\n")
   cat("\t -h/--help   show the usage of gdm4Par.R \n")
   cat("\t -p/--base.path   set the path of gdm4Par.R . the default value is ./ \n")
-  cat("\t --case.file.name   set the name of case data file, case is abnormal data,\n
+  cat("\t --case.file.path   set the path of case data file, case is abnormal data,\n
       this file should be in ./sourceData directory.  \n")
-  cat("\t --control.file.name   set the name of case data file, control is normal data,\n
+  cat("\t --control.file.path   set the path of case data file, control is normal data,\n
       this file should be in ./sourceData directory.  \n")
   cat("\t --period.count   set the number of periods  .
       the default is 5  \n")
@@ -90,9 +90,8 @@ print.usage <- function(){
       \n")
 }
 
-divide.files.by.periods <- function(state,file.name){
-  matrix.table <- read.table(file.path("sourceData",file.name),
-                             header=TRUE,sep="")
+divide.files.by.periods <- function(state,file.path){
+  matrix.table <- read.table(file.path,header=TRUE,sep="")
   period.name <- ""
   z <- c((1-PERIOD.SAMPLE.COUNT):1)  
   
@@ -442,19 +441,19 @@ plot.ci <- function(){
 
 gdm <- function(){
   
-  if(is.null(CASE.FILE.NAME)){
-    stop("you should set --case.file.name")
+  if(is.null(CASE.FILE.PATH)){
+    stop("you should set --case.file.path")
   }else{
-    if(is.null(CONTROL.FILE.NAME)){
+    if(is.null(CONTROL.FILE.PATH)){
       STATE.COUNT <<- 1 #no control data
     }
   }
   
   registerDoParallel(cores=CORES)  
-  divide.files.by.periods(STATE[1],CASE.FILE.NAME)
+  divide.files.by.periods(STATE[1],CASE.FILE.PATH)
   
   if(STATE.COUNT == 2){
-    divide.files.by.periods(STATE[2],CONTROL.FILE.NAME)
+    divide.files.by.periods(STATE[2],CONTROL.FILE.PATH)
     
     foreach (period = 1:PERIOD.COUNT) %dopar% {
       file.name <- paste("matrix_table_",period,sep="")
