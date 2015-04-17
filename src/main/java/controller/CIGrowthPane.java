@@ -37,7 +37,7 @@ import utils.CommonUtils;
 public class CIGrowthPane extends JPanel {
 	private  final  String classPath = this.getClass().getResource("/").getPath();
 	private static final Logger log = Logger.getLogger(CIGrowthPane.class);
-	private String worspace = CommonUtils.getValueByKeyFromConfig("work.space", classPath + "tempVariables.properties");
+	private String workspace = CommonUtils.getValueByKeyFromConfig("work.space", classPath + "tempVariables.properties");
 	private BufferedImage paintImage = new BufferedImage(500, 400, BufferedImage.TYPE_3BYTE_BGR);
 
 	/**
@@ -70,7 +70,7 @@ public class CIGrowthPane extends JPanel {
 	}
 
 	public void load() throws IOException {
-		paintImage = ImageIO.read(new File(worspace+"ci.png"));
+		paintImage = ImageIO.read(new File(workspace+"ci.png"));
 		// update panel with new paint image
 		repaint();
 	}

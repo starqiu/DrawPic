@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Window;
 import java.awt.geom.GeneralPath;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -14,8 +15,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
+
+import utils.CommonUtils;
 import model.Edge;
 import model.Node;
 
@@ -32,7 +38,7 @@ import model.Node;
  */
 
 /**
- * 实现功能：
+ * 实现功能：DNB 可视化
  * <p>
  * date author email notes<br />
  * -------- --------------------------- ---------------<br />
@@ -40,33 +46,66 @@ import model.Node;
  * </p>
  *
  */
-public class MyCanvas extends JFrame {
-	public final static int WINDOW_WIDTH = 1280;
-	public final static int WINDOW_LENGTH = 1024;
+public class DNBVisualPane extends JPanel {
+	public  int WINDOW_WIDTH;
+	public  int WINDOW_LENGTH;
 	public final static Random random = new Random();
-	public static String sourcePath="/host/data/";
-
-	GeneralPath gPath = new GeneralPath(); // GeneralPath对象实例
-	Point aPoint;
+	private  final  String classPath = this.getClass().getResource("/").getPath();
+	public  String workspace=CommonUtils.getValueByKeyFromConfig("work.space", classPath + "tempVariables.properties");
+	private static final Logger log = Logger.getLogger(CIGrowthPane.class);
+	private BufferedImage paintImage ;
 
 	// 构造函数
-	public MyCanvas() {
-		super("Draw Network"); // 调用父类构造函数
-//		 enableEvents(AWTEvent.MOUSE_EVENT_MASK|AWTEvent.MOUSE_MOTION_EVENT_MASK);
-		// //允许事件
-
-		setSize(WINDOW_WIDTH, WINDOW_LENGTH); // 设置窗口尺寸
+	public DNBVisualPane() {
+		super(); 
+		
 		setVisible(true); // 设置窗口可视
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 关闭窗口时退出程序
 	}
 
+	@Override
+	protected void paintComponent(Graphics g) {
+		log.info("paintComponent");
+		super.paintComponent(g);
+		g.drawImage(paintImage, 0, 0, null);
+	}
+
+	// draw painting
+	public void updatePaint() {
+		Graphics g = paintImage.createGraphics();
+
+		// draw on paintImage using Graphics
+
+		g.dispose();
+		// repaint panel with new modified paint
+		repaint();
+	}
+
+	public void save(File savedFile) throws IOException {
+		ImageIO.write(paintImage, "PNG", savedFile);
+	}
+
+	public void load() throws IOException {
+		paintImage = ImageIO.read(new File(workspace+"ci.png"));
+		// update panel with new paint image
+		repaint();
+	}
+	
+	@Override
 	public void paint(Graphics g) { // 重载窗口组件的paint()方法
+		log.info("paint");
+		WINDOW_WIDTH = getWidth();
+		WINDOW_LENGTH = getHeight();
+		paintImage = new BufferedImage(WINDOW_WIDTH, WINDOW_LENGTH, BufferedImage.TYPE_3BYTE_BGR);
+		
+		super.paint(g);
+//		setSize(WINDOW_WIDTH, WINDOW_LENGTH); // 设置窗口尺寸
 		Graphics2D g2D = (Graphics2D) g; // 获取图形环境
 
 //		String sourcePath ="src"+File.separator;
 //		String sourcePath ="";
-		Map<String, Node> nodesMap = getAllNodesByPeriod(sourcePath, "1");
-		List<Edge> edges = getAllEdgesByPeriod(sourcePath, "1", nodesMap);
+		String period = "1";
+		Map<String, Node> nodesMap = getAllNodesByPeriod( period);
+		List<Edge> edges = getAllEdgesByPeriod( period, nodesMap);
 
 		for (Node node : nodesMap.values()) {
 			g2D.drawLine(node.getX(), node.getY(), node.getX(), node.getY());
@@ -76,24 +115,18 @@ public class MyCanvas extends JFrame {
 			g2D.drawLine(edge.getSource().getX(), edge.getSource().getY(), edge
 					.getTarget().getX(), edge.getTarget().getY());
 		}
+		
+
 	}
 
-	public static void main(String[] args) {
-		if (args.length>0) {
-			sourcePath = args[0];
-		}
-		new MyCanvas();
-	}
-
-	public static Map<String, Node> getAllNodesByPeriod(String classPath,
-			String period) {
+	public  Map<String, Node> getAllNodesByPeriod(String period) {
 		Map<String, Node> nodesMap = new HashMap<String, Node>();
 		// HashMap<String, String> dnbMap = getDnbMapByPeriod(classPath,
 		// period);
 
 		try {
 			BufferedReader idBr = new BufferedReader(new FileReader(new File(
-					classPath + "matrix_table_" + period + "_all_genes.txt")));
+					workspace + "matrix_table_" + period + "_all_genes.txt")));
 			// skip the title
 			idBr.readLine();
 
@@ -112,12 +145,14 @@ public class MyCanvas extends JFrame {
 		return nodesMap;
 	}
 
-	public static List<Edge> getAllEdgesByPeriod(String classPath,
-			String period, Map<String, Node> nodesMap) {
+	public  List<Edge> getAllEdgesByPeriod(String period, Map<String, Node> nodesMap) {
+		
+		CommonUtils.geneateGdmCsv(classPath);
+		
 		List<Edge> edges = new ArrayList<Edge>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(new File(
-					classPath + "gdm_" + period + ".csv")));
+					workspace + "gdm_" + period + ".csv")));
 			// skip the title
 			br.readLine();
 			String[] line;

@@ -43,23 +43,31 @@ public class CommonUtils {
 		super();
 	}
 	
+	/**
+	 * 生成gdm_XXX.csv,以便DNB可视化
+	 * @param classPath 累路径
+	 */
 	public static void geneateGdmCsv(String classPath) {
 
 		String propPath = classPath + "tempVariables.properties";
-		String periodCount = CommonUtils.getValueByKeyFromConfig(
-				"period.count", propPath);
-		String periodSampleCount = CommonUtils.getValueByKeyFromConfig(
-				"period.sample.count", propPath);
-		String cores = CommonUtils.getValueByKeyFromConfig("cores", propPath);
-
-		StringBuffer cmdSb = new StringBuffer();
-		cmdSb.append(classPath).append("core/cytoscape.R ").append(" -p ")
-				.append(classPath).append("  --period.count   ")
-				.append(periodCount).append("  --period.sample.count  ")
-				.append(periodSampleCount).append(" --cores ").append(cores);
-		String cmd = cmdSb.toString();
-		log.info(cmd);
-		execShellCmd(cmd);
+		
+		if (!"true".equals(CommonUtils.getValueByKeyFromConfig("has.generated.gdm.csv", propPath))) {
+			String periodCount = CommonUtils.getValueByKeyFromConfig("period.count", propPath);
+			String periodSampleCount = CommonUtils.getValueByKeyFromConfig("period.sample.count", propPath);
+			String cores = CommonUtils.getValueByKeyFromConfig("cores", propPath);
+			
+			StringBuffer cmdSb = new StringBuffer();
+			cmdSb.append(classPath).append("core/cytoscape.R ").append(" -p ")
+					.append(classPath).append("  --period.count   ")
+					.append(periodCount).append("  --period.sample.count  ")
+					.append(periodSampleCount).append(" --cores ")
+					.append(cores);
+			String cmd = cmdSb.toString();
+			log.info(cmd);
+			execShellCmd(cmd);
+			CommonUtils.storeValueByKeyFromConfig("has.generated.gdm.csv", "true", propPath);
+		}
+		
 	}
 
 	/**

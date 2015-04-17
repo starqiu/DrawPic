@@ -6,10 +6,10 @@ cd core
 
 chmod -R  +x *
 ls -l 
-cd ..
+#cd ..
 
-echo 'delete old files'
-rm *matrix_table*
-rm *gdm*
-rm *ci*
-ls -l 
+#echo 'delete old files'
+#rm *matrix_table*
+#rm *gdm*
+#rm *ci*
+#ls -l 

@@ -46,7 +46,7 @@ import java.awt.event.ActionEvent;
  */
 
 /**
- * 实现功能： 
+ * 实现功能： DNB的检测分析主程序
  * <p>
  * date	    author            email		           notes<br />
  * --------	---------------------------	---------------<br />
@@ -68,7 +68,8 @@ public class DNBGen extends JFrame {
 	private JTextField txtPccOutAmount;
 	private JTextField txtCores;
 	private JTextField txtClusterH;
-	private CIGrowthPane jpCIGrowth = null;
+	private CIGrowthPane pCIGrowth = null;
+	private DNBVisualPane pDNBVisual  = null;
 
 	/**
 	 * Launch the application.
@@ -109,37 +110,65 @@ public class DNBGen extends JFrame {
 		
 		dnbGenTab(tabbedPane);
 		
-		try {
-			jpCIGrowth = new CIGrowthPane();
-		} catch (IOException e) {
-			log.error("draw ci growth failed!", e);
-		}
-		tabbedPane.addTab("综合指数折线图", null, jpCIGrowth, null);
+		ciGrowthTab(tabbedPane);
 		
+		pDNBVisual = new DNBVisualPane();
+		tabbedPane.addTab("DNB可视化", null, pDNBVisual, null);
+		//右键菜单=>另存为,保存图片
 		JPopupMenu popupMenu = new JPopupMenu();
-		addPopup(jpCIGrowth, popupMenu);
+		addPopup(pDNBVisual, popupMenu);
 		
 		JMenuItem mntmSaveAs = new JMenuItem("另存为");
 		mntmSaveAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					saveFile(jpCIGrowth);
+					File savedFile  =  saveFile(pCIGrowth);
+					pDNBVisual.save(savedFile);
 				} catch (IOException e1) {
 					log.error("create file error!", e1);
 				}
 			}
 		});
 		popupMenu.add(mntmSaveAs);
-
 	}
 
 	/**
-	 * 参数输入tab相关的方法
+	 * 绘制DNB的综合指数(CI)折线图,并可以另存到文件中
+	 * @param tabbedPane
+	 */
+	public void ciGrowthTab(JTabbedPane tabbedPane) {
+		try {
+			pCIGrowth = new CIGrowthPane();
+		} catch (IOException e) {
+			log.error("draw ci growth failed!", e);
+		}
+		tabbedPane.addTab("综合指数折线图", null, pCIGrowth, null);
+		
+		//右键菜单=>另存为,保存图片
+		JPopupMenu popupMenu = new JPopupMenu();
+		addPopup(pCIGrowth, popupMenu);
+		
+		JMenuItem mntmSaveAs = new JMenuItem("另存为");
+		mntmSaveAs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					File savedFile  =  saveFile(pCIGrowth);
+					pCIGrowth.save(savedFile);
+				} catch (IOException e1) {
+					log.error("create file error!", e1);
+				}
+			}
+		});
+		popupMenu.add(mntmSaveAs);
+	}
+
+	/**
+	 * 参数输入(生成DNB)tab相关的方法
 	 * @param tabbedPane
 	 */
 	public void dnbGenTab(JTabbedPane tabbedPane) {
-		JPanel jpDNBGen = new JPanel();
-		tabbedPane.addTab("参数输入", null, jpDNBGen, null);
+		JPanel pDNBGen = new JPanel();
+		tabbedPane.addTab("参数输入", null, pDNBGen, null);
 		
 		JLabel lblWorkSpace = new JLabel("工作目录:");
 		
@@ -199,7 +228,7 @@ public class DNBGen extends JFrame {
 		txtPeriodSampleCount= new JTextField();
 		txtPeriodSampleCount.setText("5");
 		txtSdThreshold= new JTextField();
-		txtSdThreshold.setText("0.01");
+		txtSdThreshold.setText("0.001");
 		txtClusterH= new JTextField();
 		txtClusterH.setText("0.75");
 		txtPccOutAmount= new JTextField();
@@ -224,7 +253,7 @@ public class DNBGen extends JFrame {
 			}
 		});
 		
-		dnbGenLayout(jpDNBGen, lblWorkSpace, lblCase, lblControl, lblPeriod,
+		dnbGenLayout(pDNBGen, lblWorkSpace, lblCase, lblControl, lblPeriod,
 				lblPeriodSampleCount, lblSdThreshold, lblClusterH,
 				lblPccOutAmount, lblCores_1,
 				btnWorkSpace, btnCase, btnControl, btnDnbgen);
@@ -297,6 +326,7 @@ public class DNBGen extends JFrame {
 		CommonUtils.storeValueByKeyFromConfig("cores", cores, propPath);
 		CommonUtils.storeValueByKeyFromConfig("period.count", periodCount, propPath);
 		CommonUtils.storeValueByKeyFromConfig("period.sample.count", periodSampleCount, propPath);
+		CommonUtils.storeValueByKeyFromConfig("work.space", basePath, propPath);
 	}
 	
 	/**
@@ -431,7 +461,7 @@ public class DNBGen extends JFrame {
 	 * @throws IOException 
 	 * 
 	 */
-	public void saveFile(Component parent) throws IOException {
+	public File saveFile(Component parent) throws IOException {
 		int operatre = fileChooser.showSaveDialog(parent);
 		if (operatre == JFileChooser.APPROVE_OPTION) {
 			File saveFile = fileChooser.getSelectedFile();
@@ -444,8 +474,9 @@ public class DNBGen extends JFrame {
 					saveFile.createNewFile();
 				}
 			}
-			((CIGrowthPane)parent) .save(saveFile);
+			return saveFile;
 		}
+		return null;
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
