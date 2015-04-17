@@ -1,11 +1,13 @@
 package controller;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -32,6 +34,8 @@ import javax.swing.JPopupMenu;
 import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.awt.Color;
 
 /*
  * ============================================================
@@ -101,6 +105,7 @@ public class DNBGen extends JFrame {
 		setMenu(menuBar);
 		
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
@@ -113,6 +118,7 @@ public class DNBGen extends JFrame {
 		ciGrowthTab(tabbedPane);
 		
 		pDNBVisual = new DNBVisualPane();
+		pDNBVisual.setBackground(Color.WHITE);
 		tabbedPane.addTab("DNB可视化", null, pDNBVisual, null);
 		//右键菜单=>另存为,保存图片
 		JPopupMenu popupMenu = new JPopupMenu();
@@ -122,8 +128,16 @@ public class DNBGen extends JFrame {
 		mntmSaveAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					File savedFile  =  saveFile(pCIGrowth);
-					pDNBVisual.save(savedFile);
+					File savedFile  =  saveFile(pDNBVisual);
+					if (savedFile == null ) {
+						return;
+					}
+					BufferedImage image = new BufferedImage(pDNBVisual.getWidth(), pDNBVisual.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+					Graphics2D g = image.createGraphics();
+					pDNBVisual.paint(g);
+//					g.drawImage(image, pDNBVisual.getWidth(), pDNBVisual.getHeight(), null);
+					ImageIO.write(image,"png", savedFile);
+//					pDNBVisual.save(savedFile);
 				} catch (IOException e1) {
 					log.error("create file error!", e1);
 				}

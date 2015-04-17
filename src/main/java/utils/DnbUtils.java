@@ -20,9 +20,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import model.CiData;
 import model.DnbData;
+import model.Edge;
+import model.Node;
 
 import org.apache.log4j.Logger;
 
@@ -43,149 +47,80 @@ public final class DnbUtils {
 		super();
 	}
 
+	/**
+	 * 获取特定时期的所有点,如果点还没有坐标,则为其随机一个坐标
+	 * @param nodesMap 同返回值
+	 * @param workspace 工作目录
+	 * @param period 时期
+	 * @param random Random类实例,用于随机生成点的坐标
+	 * @param maxWidth 点横坐标的最大值
+	 * @param maxHeight 点纵坐标的最大值
+	 * @return key为点的ID,value为对应的点
+	 */
+	public static Map<String, Node> getAllNodesByPeriod(
+			String workspace, String period, Random random, int maxWidth,
+			int maxHeight,Map<String, Node> nodesMap) {
+		if (nodesMap == null) {
+			nodesMap = new HashMap<String, Node>();
+			// HashMap<String, String> dnbMap = getDnbMapByPeriod(classPath,
+			// period);
 
-//	public static List<EleObj> getElementByPeriod(String classPath,
-//			String period) {
-//
-//		// CytoscapeElement ele = new CytoscapeElement();
-//		// ele.setId("ele" + period);
-//		// ele.setNodes(getAllNodesByPeriod(classPath, period));
-//		// ele.setEdges(getAllEdgesByPeriod(classPath, period));
-//
-//		// Element ele = new Element();
-////		List<EleObj> ele = getAllNodesByPeriod(classPath, period);// add nodes
-//		List<EleObj> ele = getAllHighSdNodesByPeriod(classPath, period);// add nodes
-//		ele.addAll(getAllEdgesByPeriod(classPath, period));
-//		return ele;
-//	}
-//
-//	public static List<EleObj> getAllEdgesByPeriod(String classPath,
-//			String period) {
-//		// List<CytoscapeEdge> edges = new ArrayList<CytoscapeEdge>();
-//		List<EleObj> edges = new ArrayList<EleObj>();
-//		// HashMap<String, String> dnbMap = getDnbMapByPeriod(classPath,
-//		// period);
-//		try {
-//			BufferedReader br = new BufferedReader(new FileReader(new File(
-//					classPath + "gdm_" + period + ".csv")));
-//			// skip the title
-//			br.readLine();
-//			String[] line;
-//			while (br.ready()) {
-//				line = br.readLine().split(",");
-//
-//				EdgeData data = new EdgeData();
-//				data.setSource(line[0]);
-//				data.setTarget(line[1]);
-//				data.setId(line[2]);
-////				data.setWeight(Double.valueOf(line[3]));
-//
-//				EleObj edge = new EleObj();
-//				edge.setData(data);
-//				edge.setGroup("edges");
-//
-//				edges.add(edge);
-//			}
-//		} catch (IOException e) {
-//			log.error("get all edges error! period=" + period, e);
-//		}
-//		return edges;
-//	}
+			try {
+				BufferedReader idBr = new BufferedReader(new FileReader(
+						new File(workspace + "matrix_table_" + period
+								+ "_all_genes.txt")));
+				// skip the title
+				idBr.readLine();
 
-//	public static List<EleObj> getAllNodesByPeriod(String classPath,
-//			String period) {
-//		List<EleObj> nodes = new ArrayList<EleObj>();
-//		// HashMap<String, String> dnbMap = getDnbMapByPeriod(classPath,
-//		// period);
-//
-//		try {
-//			BufferedReader idBr = new BufferedReader(new FileReader(new File(
-//					classPath + "matrix_table_" + period + "_genes.txt")));
-//			BufferedReader sdBr = new BufferedReader(new FileReader(new File(
-//					classPath + "matrix_table_" + period + "_sd.txt")));
-//
-//			// skip the title
-//			idBr.readLine();
-//			sdBr.readLine();
-//
-//			while (idBr.ready() && sdBr.ready()) {
-//				NodeData data = new NodeData();
-//
-//				data.setId(idBr.readLine());
-//				// data.setGene_name(data.getId());
-////				 data.setScore(Double.valueOf(sdBr.readLine()));
-//				// if (dnbMap.get(data.getId()) != null) {
-//				// data.setNode_type("dnb");
-//				// }
-//
-//				EleObj node = new EleObj();
-//				node.setData(data);
-//				// node.setPosition(new Position());
-//				// node.setSelected(true);
-//
-//				nodes.add(node);
-//			}
-//		} catch (IOException e) {
-//			log.error("get all nodes error!period=" + period, e);
-//		}
-//		return nodes;
-//	}
-//	
-//	public static List<EleObj> getAllHighSdNodesByPeriod(String classPath,
-//			String period) {
-//		List<EleObj> nodes = new ArrayList<EleObj>();
-//		 HashMap<String, String> dnbMap = getDnbMapByPeriod(classPath,
-//		 period);
-//		
-//		//add DNB node
-//		EleObj dnbNode = new EleObj();
-//		NodeData dnbData = new NodeData();
-//		dnbData.setId("dnb");
-////		dnbData.setScore(50000);
-//		dnbNode.setData(dnbData);
-//		nodes.add(dnbNode);
-//		
-//		//add  not DNB  node
-////		EleObj notDnbNode = new EleObj();
-////		NodeData notDnbData = new NodeData();
-////		notDnbData.setId("notDnb");
-////		notDnbData.setScore(500000);
-////		notDnbNode.setData(notDnbData);
-////		nodes.add(notDnbNode);
-//		
-//		try {
-//			BufferedReader highSdGeneBr = new BufferedReader(new FileReader(new File(
-//					classPath + "matrix_table_" + period + "_high_sd_genes.txt")));
-//			
-//			String[] line;
-//			while (highSdGeneBr.ready()) {
-//				
-//				line = highSdGeneBr.readLine().split(",");
-//				
-//				NodeData data = new NodeData();
-//				
-//				data.setId(line[0]);
-//				// data.setGene_name(data.getId());
-////				data.setScore(Double.valueOf(line[1]));
-//				 if (dnbMap.get(data.getId()) != null) {
-////				 data.setNode_type("dnb");
-//					 data.setParent("dnb");   
-//				 }else {
-//					 data.setParent("notDnb");   
-//					
-//				}
-//				EleObj node = new EleObj();
-//				node.setData(data);
-//				// node.setPosition(new Position());
-//				// node.setSelected(true);
-//				
-//				nodes.add(node);
-//			}
-//		} catch (IOException e) {
-//			log.error("get all nodes error!period=" + period, e);
-//		}
-//		return nodes;
-//	}
+				while (idBr.ready()) {
+					Node node = new Node();
+					node.setId(idBr.readLine());
+					node.setX(random.nextInt(maxWidth));
+					node.setY(random.nextInt(maxHeight));
+					nodesMap.put(node.getId(), node);
+				}
+
+				idBr.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return nodesMap;
+	}
+
+	/**
+	 * @param classPath 类路径,R文件所在路径
+	 * @param workspace 工作目录
+	 * @param period 时期
+	 * @param nodesMap key为点的ID,value为对应的点
+	 * @return
+	 */
+	public static List<Edge> getAllEdgesByPeriod(String classPath,
+			String workspace, String period, Map<String, Node> nodesMap) {
+
+		CommonUtils.geneateGdmCsv(classPath);
+
+		List<Edge> edges = new ArrayList<Edge>();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(new File(
+					workspace + "gdm_" + period + ".csv")));
+			// skip the title
+			br.readLine();
+			String[] line;
+			while (br.ready()) {
+				line = br.readLine().split(",");
+
+				Edge edge = new Edge();
+				edge.setSource(nodesMap.get(line[0]));
+				edge.setTarget(nodesMap.get(line[1]));
+				edge.setId(line[2]);
+				edges.add(edge);
+			}
+		} catch (IOException e) {
+			System.out.println("get all edges error! period=" + period);
+		}
+		return edges;
+	}
 
 	/**
 	 * change dnb list to map ,so it can indicate dnb genes from all genes
