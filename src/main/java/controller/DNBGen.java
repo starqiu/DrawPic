@@ -91,6 +91,7 @@ public class DNBGen extends JFrame {
 			public void run() {
 				try {
 					DNBGen frame = new DNBGen();
+					frame.setSize(1024, 768);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					log.error("new frame failed!", e);
