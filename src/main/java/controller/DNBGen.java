@@ -118,7 +118,6 @@ public class DNBGen extends JFrame {
 		ciGrowthTab(tabbedPane);
 		
 		pDNBVisual = new DNBVisualPane();
-		pDNBVisual.setBackground(Color.WHITE);
 		tabbedPane.addTab("DNB可视化", null, pDNBVisual, null);
 		//右键菜单=>另存为,保存图片
 		JPopupMenu popupMenu = new JPopupMenu();
