@@ -11,8 +11,6 @@
  */
 package controller;
 
-import javax.swing.JPanel;
-
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -35,6 +33,8 @@ import utils.CommonUtils;
  *
  */
 public class CIGrowthPane extends JPanel {
+	/** */
+	private static final long serialVersionUID = 8460166489772911187L;
 	private  final  String classPath = this.getClass().getResource("/").getPath();
 	private static final Logger log = Logger.getLogger(CIGrowthPane.class);
 	private String workspace = CommonUtils.getValueByKeyFromConfig("work.space", classPath + "tempVariables.properties");

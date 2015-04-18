@@ -2,31 +2,24 @@ package controller;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.RenderingHints;
-import java.awt.Window;
-import java.awt.geom.GeneralPath;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import model.Edge;
+import model.Node;
 
 import org.apache.log4j.Logger;
 
 import utils.CommonUtils;
 import utils.DnbUtils;
-import model.Edge;
-import model.Node;
 
 /*
  * ============================================================
@@ -50,19 +43,22 @@ import model.Node;
  *
  */
 public class DNBVisualPane extends JPanel {
+	/** */
+	private static final long serialVersionUID = 2894886282413861500L;
 	public  int WINDOW_WIDTH=1024;
 	public  int WINDOW_LENGTH=768;
 	public final static Random random = new Random();
 	private  final  String classPath = this.getClass().getResource("/").getPath();
-	public  String workspace=CommonUtils.getValueByKeyFromConfig("work.space", classPath + "tempVariables.properties");
+	private  String workspace=CommonUtils.getValueByKeyFromConfig("work.space", classPath + "tempVariables.properties");
 	private static final Logger log = Logger.getLogger(DNBVisualPane.class);
 	private BufferedImage paintImage = new BufferedImage(WINDOW_WIDTH, WINDOW_LENGTH, BufferedImage.TYPE_INT_RGB);
-	private boolean need_repaint = true;
-	public Map<String, Node> nodesMap = null;
+	private Map<String, Node> nodesMap = null;
+	private String period = null;
 
-	// 构造函数
-	public DNBVisualPane() {
+	public DNBVisualPane(String period) {
 		super(); 
+		this.period = period;
+		log.info("current dnb period i= "+period);
 		try {
 			load();
 		} catch (IOException e) {
@@ -73,13 +69,7 @@ public class DNBVisualPane extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-//		log.info("paintComponent");
 		super.paintComponent(g);
-		
-//		Graphics2D g2D = (Graphics2D) g; // 获取图形环境
-//		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);//反锯齿
-//		String period = "1";
-//		drawAllNodesAndEdgesByPeriod(g2D, period);
 		g.drawImage(paintImage, 0, 0, Color.RED, null);
 
 	}
@@ -88,7 +78,7 @@ public class DNBVisualPane extends JPanel {
 	 * @param g
 	 * @param period
 	 */
-	private void drawAllNodesAndEdgesByPeriod(Graphics g, String period) {
+	private void drawAllNodesAndEdgesByPeriod(Graphics g) {
 		nodesMap = DnbUtils.getAllNodesByPeriod(workspace,
 				period, random, WINDOW_WIDTH, WINDOW_LENGTH, nodesMap);
 		List<Edge> edges = DnbUtils.getAllEdgesByPeriod(classPath, workspace,
@@ -103,11 +93,6 @@ public class DNBVisualPane extends JPanel {
 					.getTarget().getX(), edge.getTarget().getY());
 		}
 	}
-
-	@Override
-	protected void paintChildren(Graphics g) {
-		super.paintChildren(g);
-	};
 	
 	// draw painting
 	public void updatePaint() {
@@ -134,8 +119,7 @@ public class DNBVisualPane extends JPanel {
 		g2D.setPaint(Color.BLACK);
 		// draw on paintImage using Graphics
 		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);//反锯齿
-		String period = "1";
-		drawAllNodesAndEdgesByPeriod(g2D, period);
+		drawAllNodesAndEdgesByPeriod(g2D);
 
 		g2D.dispose();
 		// repaint panel with new modified paint
@@ -143,36 +127,24 @@ public class DNBVisualPane extends JPanel {
 	}
 	
 	@Override
-	public void paint(Graphics g) { // 重载窗口组件的paint()方法
-//		log.info("paint");
+	public void paint(Graphics g) { 
 		WINDOW_WIDTH = getWidth();
 		WINDOW_LENGTH = getHeight();
-//		paintImage = new BufferedImage(WINDOW_WIDTH, WINDOW_LENGTH, BufferedImage.TYPE_3BYTE_BGR);
-		
 		super.paint(g);
-//		setSize(WINDOW_WIDTH, WINDOW_LENGTH); // 设置窗口尺寸
-//		Graphics2D g2D = (Graphics2D) g; // 获取图形环境
-//		if (need_repaint) {
-//			String period = "1";
-//			Map<String, Node> nodesMap = getAllNodesByPeriod( period);
-//			List<Edge> edges = getAllEdgesByPeriod( period, nodesMap);
-//
-//			for (Node node : nodesMap.values()) {
-//				g2D.drawLine(node.getX(), node.getY(), node.getX(), node.getY());
-//			}
-//
-//			for (Edge edge : edges) {
-//				g2D.drawLine(edge.getSource().getX(), edge.getSource().getY(), edge
-//						.getTarget().getX(), edge.getTarget().getY());
-//			}
-//			
-//			need_repaint =  false;
-//		}
-		
-
 	}
 
+	public String getPeriod() {
+		return period;
+	}
+	
+	public void setPeriod(String period) {
+		this.period = period;
+	}
+	public Map<String, Node> getNodesMap() {
+		return nodesMap;
+	}
 
-
-
+	public void setNodesMap(Map<String, Node> nodesMap) {
+		this.nodesMap = nodesMap;
+	}
 }

@@ -1,9 +1,14 @@
 package controller;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,6 +25,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -28,14 +35,9 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import utils.CommonUtils;
-
-import javax.swing.JPopupMenu;
-
-import java.awt.Component;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
-import java.awt.Color;
+import utils.DnbUtils;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 /*
  * ============================================================
@@ -59,7 +61,10 @@ import java.awt.Color;
  */
 public class DNBGen extends JFrame {
 	
+	/** */
+	private static final long serialVersionUID = 496091640493909358L;
 	private  final  String classPath = this.getClass().getResource("/").getPath();
+	private  String workspace=CommonUtils.getValueByKeyFromConfig("work.space", classPath + "tempVariables.properties");
 	private static final Logger log = Logger.getLogger(DNBGen.class);
 	private JPanel contentPane;
 	private JTextField txtWorkSpace;
@@ -73,7 +78,9 @@ public class DNBGen extends JFrame {
 	private JTextField txtCores;
 	private JTextField txtClusterH;
 	private CIGrowthPane pCIGrowth = null;
-	private DNBVisualPane pDNBVisual  = null;
+	private JPanel pDNBVisual  = null;
+	private DNBVisualPane dnbCanvas;
+	private GroupLayout gl_pDNBVisual = null;
 
 	/**
 	 * Launch the application.
@@ -113,27 +120,77 @@ public class DNBGen extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		
+		// add execute mode for R file
+		String corePath = classPath + "core/";
+		String addExeModCmd = "bash " + corePath + "addExeModAndRemoveOldFiles.sh " + corePath;
+		log.info("addExeModCmd: " + addExeModCmd);
+		CommonUtils.execShellCmd(addExeModCmd);
+		
 		dnbGenTab(tabbedPane);
 		
 		ciGrowthTab(tabbedPane);
 		
-		pDNBVisual = new DNBVisualPane();
+		dnbVisualTab(tabbedPane);
+	}
+
+	/**
+	 * 可视化DNB ,并可以通过选择DNB的时期来绘制不同的DNB
+	 * @param tabbedPane
+	 */
+	private void dnbVisualTab(JTabbedPane tabbedPane) {
+		pDNBVisual = new JPanel();
 		tabbedPane.addTab("DNB可视化", null, pDNBVisual, null);
-		//右键菜单=>另存为,保存图片
+		
+		JLabel lbldnbperiod = new JLabel("请选择DNB的时期(Period):");
+		JComboBox<String> cmboxDNBPeriod = new JComboBox<String>();
+		String[] dnbPeriods = DnbUtils.getAllDnbPeriods(workspace);
+
+		if (null == dnbPeriods) {
+			log.error("no dnb,create DNB Visual Tab failed!");
+			return;
+		}
+		
+		String period = dnbPeriods[0];
+		dnbCanvas = new DNBVisualPane(period);
+		dnbCanvasSaveAs();
+		dnbVisualTabLayout(lbldnbperiod, cmboxDNBPeriod);
+		
+		//这段语句必须放到dnbVisualTabLayout方法之后,否则进入Design界面会因为无法加载动态代码而失败
+		for (String p : dnbPeriods) {
+			cmboxDNBPeriod.addItem(p);
+		}
+		cmboxDNBPeriod.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				dnbCanvas.setNodesMap(null);
+				dnbCanvas.setPeriod((String)e.getItem());
+				
+				try {
+					dnbCanvas.load();
+				} catch (IOException e1) {
+					log.error("create DNB Visual panel error!", e1);
+				}
+			}
+		});
+	}
+
+	/**
+	 * DNB可视化画板的右键菜单=>另存为,保存图片
+	 */
+	private void dnbCanvasSaveAs() {
 		JPopupMenu popupMenu = new JPopupMenu();
-		addPopup(pDNBVisual, popupMenu);
+		addPopup(dnbCanvas, popupMenu);
 		
 		JMenuItem mntmSaveAs = new JMenuItem("另存为");
 		mntmSaveAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					File savedFile  =  saveFile(pDNBVisual);
+					File savedFile  =  saveFile(dnbCanvas);
 					if (savedFile == null ) {
 						return;
 					}
-					BufferedImage image = new BufferedImage(pDNBVisual.getWidth(), pDNBVisual.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+					BufferedImage image = new BufferedImage(dnbCanvas.getWidth(), dnbCanvas.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 					Graphics2D g = image.createGraphics();
-					pDNBVisual.paint(g);
+					dnbCanvas.paint(g);
 //					g.drawImage(image, pDNBVisual.getWidth(), pDNBVisual.getHeight(), null);
 					ImageIO.write(image,"png", savedFile);
 //					pDNBVisual.save(savedFile);
@@ -143,6 +200,41 @@ public class DNBGen extends JFrame {
 			}
 		});
 		popupMenu.add(mntmSaveAs);
+	}
+
+	/**
+	 * DNB可视化Tab的布局
+	 * @param lbldnbperiod
+	 * @param cmboxDNBPeriod
+	 */
+	private void dnbVisualTabLayout(JLabel lbldnbperiod,
+			JComboBox<String> cmboxDNBPeriod) {
+		gl_pDNBVisual = new GroupLayout(pDNBVisual);
+		gl_pDNBVisual.setHorizontalGroup(
+			gl_pDNBVisual.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_pDNBVisual.createSequentialGroup()
+					.addGap(20)
+					.addComponent(lbldnbperiod)
+					.addGap(26)
+					.addComponent(cmboxDNBPeriod, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(376))
+				.addGroup(gl_pDNBVisual.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(dnbCanvas, GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		gl_pDNBVisual.setVerticalGroup(
+			gl_pDNBVisual.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_pDNBVisual.createSequentialGroup()
+					.addGap(5)
+					.addGroup(gl_pDNBVisual.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lbldnbperiod)
+						.addComponent(cmboxDNBPeriod, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(dnbCanvas, GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		pDNBVisual.setLayout(gl_pDNBVisual);
 	}
 
 	/**
@@ -157,7 +249,13 @@ public class DNBGen extends JFrame {
 		}
 		tabbedPane.addTab("综合指数折线图", null, pCIGrowth, null);
 		
-		//右键菜单=>另存为,保存图片
+		ciGrowthSaveAs();
+	}
+
+	/**
+	 *  综合指数折线图的右键菜单=>另存为,保存图片
+	 */
+	private void ciGrowthSaveAs() {
 		JPopupMenu popupMenu = new JPopupMenu();
 		addPopup(pCIGrowth, popupMenu);
 		
@@ -299,10 +397,6 @@ public class DNBGen extends JFrame {
 	 * the main method of DNB generate
 	 */
 	public void dnbGenMain() {
-		String corePath = classPath + "core/";
-		String addExeModCmd = "bash " + corePath + "addExeModAndRemoveOldFiles.sh " + corePath;
-		log.info("addExeModCmd: " + addExeModCmd);
-		CommonUtils.execShellCmd(addExeModCmd);
 
 		String basePath = txtWorkSpace.getText() + File.separator;
 		String caseFilePath = txtCaseFile.getText();

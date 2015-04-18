@@ -69,6 +69,8 @@ public final class DnbUtils {
 				BufferedReader idBr = new BufferedReader(new FileReader(
 						new File(workspace + "matrix_table_" + period
 								+ "_all_genes.txt")));
+				log.info("node file path is "+workspace + "matrix_table_" + period
+								+ "_all_genes.txt");
 				// skip the title
 				idBr.readLine();
 
@@ -116,6 +118,7 @@ public final class DnbUtils {
 				edge.setId(line[2]);
 				edges.add(edge);
 			}
+			br.close();
 		} catch (IOException e) {
 			System.out.println("get all edges error! period=" + period);
 		}
@@ -130,6 +133,7 @@ public final class DnbUtils {
 	 * @param period
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private static HashMap<String, String> getDnbMapByPeriod(String classPath,
 			String period) {
 		List<String> dnbIds = getDnbGeneIds(classPath, period);
@@ -177,11 +181,16 @@ public final class DnbUtils {
 		return geneIds;
 	}
 
-	public static String[] getAllDnbPeriods(String classPath) {
+	/**
+	 * 根据工作路径,读取对应的文件获得所有的DNB时期
+	 * @param workspace 工作目录
+	 * @return 所有的DNB时期
+	 */
+	public static String[] getAllDnbPeriods(String workspace) {
 		String[] periods = null;
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(new File(
-					classPath + "ci_maxima_index.txt")));
+					workspace + "ci_maxima_index.txt")));
 			periods = br.readLine().split("\t");
 			br.close();
 		} catch (IOException e) {
