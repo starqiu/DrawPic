@@ -44,8 +44,8 @@ public class CIGrowthPane extends JPanel {
 	 * Create the panel.
 	 * @throws IOException 
 	 */
-	public CIGrowthPane() throws IOException {
-		load();
+	public CIGrowthPane()  {
+//		load();
 	}
 
 	@Override
@@ -69,8 +69,12 @@ public class CIGrowthPane extends JPanel {
 		ImageIO.write(paintImage, "PNG", savedFile);
 	}
 
-	public void load() throws IOException {
-		paintImage = ImageIO.read(new File(workspace+"ci.png"));
+	public void load() {
+		try {
+			paintImage = ImageIO.read(new File(workspace+"ci.png"));
+		} catch (IOException e) {
+			log.error("load ci growth picture failed!", e);
+		}
 		// update panel with new paint image
 		repaint();
 	}

@@ -55,15 +55,15 @@ public class DNBVisualPane extends JPanel {
 	private Map<String, Node> nodesMap = null;
 	private String period = null;
 
+	public DNBVisualPane() {
+		super(); 
+		setVisible(true); // 设置窗口可视
+	}
 	public DNBVisualPane(String period) {
 		super(); 
 		this.period = period;
 		log.info("current dnb period i= "+period);
-		try {
-			load();
-		} catch (IOException e) {
-			log.error("create DNB Visual panel error!", e);
-		}
+		load();
 		setVisible(true); // 设置窗口可视
 	}
 
@@ -109,7 +109,7 @@ public class DNBVisualPane extends JPanel {
 		ImageIO.write(paintImage, "PNG", savedFile);
 	}
 
-	public void load() throws IOException {
+	public void load()  {
 		
 		Graphics2D g2D = paintImage.createGraphics();
 //		g2D.setColor(Color.RED);

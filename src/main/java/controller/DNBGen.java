@@ -38,6 +38,10 @@ import utils.CommonUtils;
 import utils.DnbUtils;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 /*
  * ============================================================
@@ -81,6 +85,8 @@ public class DNBGen extends JFrame {
 	private JPanel pDNBVisual  = null;
 	private DNBVisualPane dnbCanvas;
 	private GroupLayout gl_pDNBVisual = null;
+	private JTabbedPane tabbedPane= null;
+	private JComboBox<String> cmboxDNBPeriod = null;
 
 	/**
 	 * Launch the application.
@@ -118,7 +124,23 @@ public class DNBGen extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				log.info("Tab index = "+ tabbedPane.getSelectedIndex());
+				switch (tabbedPane.getSelectedIndex()) {
+				case 1:
+					pCIGrowth.load();
+					break;
+				case 2:
+					dnbVisualMain(cmboxDNBPeriod);
+					break;
+
+				default:
+					break;
+				}
+			}
+		});
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		
 		// add execute mode for R file
@@ -143,35 +165,40 @@ public class DNBGen extends JFrame {
 		tabbedPane.addTab("DNB可视化", null, pDNBVisual, null);
 		
 		JLabel lbldnbperiod = new JLabel("请选择DNB的时期(Period):");
-		JComboBox<String> cmboxDNBPeriod = new JComboBox<String>();
-		String[] dnbPeriods = DnbUtils.getAllDnbPeriods(workspace);
-
-		if (null == dnbPeriods) {
-			log.error("no dnb,create DNB Visual Tab failed!");
-			return;
-		}
-		
-		String period = dnbPeriods[0];
-		dnbCanvas = new DNBVisualPane(period);
+		cmboxDNBPeriod = new JComboBox<String>();
+		dnbCanvas = new DNBVisualPane();
 		dnbCanvasSaveAs();
 		dnbVisualTabLayout(lbldnbperiod, cmboxDNBPeriod);
 		
-		//这段语句必须放到dnbVisualTabLayout方法之后,否则进入Design界面会因为无法加载动态代码而失败
-		for (String p : dnbPeriods) {
-			cmboxDNBPeriod.addItem(p);
-		}
+		dnbVisualMain(cmboxDNBPeriod);
+		
 		cmboxDNBPeriod.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				dnbCanvas.setNodesMap(null);
 				dnbCanvas.setPeriod((String)e.getItem());
-				
-				try {
-					dnbCanvas.load();
-				} catch (IOException e1) {
-					log.error("create DNB Visual panel error!", e1);
-				}
+				dnbCanvas.load();
 			}
 		});
+	}
+
+	/**
+	 * DNB Visual 的主方法:导入所有DNB的时期作为下拉框的值,并绘制DNB图
+	 * @param cmboxDNBPeriod
+	 */
+	private void dnbVisualMain(JComboBox<String> cmboxDNBPeriod) {
+		String[] dnbPeriods = DnbUtils.getAllDnbPeriods(workspace);
+		if (null == dnbPeriods) {
+			log.error("no dnb,create DNB Visual Tab failed!");
+			return;
+		}
+		if (cmboxDNBPeriod.getItemCount() == 0) {
+			//这段语句必须放到dnbVisualTabLayout方法之后,否则进入Design界面会因为无法加载动态代码而失败
+			for (String p : dnbPeriods) {
+				cmboxDNBPeriod.addItem(p);
+			}
+		}
+		dnbCanvas.setPeriod(dnbPeriods[0]);
+		dnbCanvas.load();
 	}
 
 	/**
@@ -243,14 +270,10 @@ public class DNBGen extends JFrame {
 	 * @param tabbedPane
 	 */
 	public void ciGrowthTab(JTabbedPane tabbedPane) {
-		try {
-			pCIGrowth = new CIGrowthPane();
-		} catch (IOException e) {
-			log.error("draw ci growth failed!", e);
-		}
+		pCIGrowth = new CIGrowthPane();
 		tabbedPane.addTab("综合指数折线图", null, pCIGrowth, null);
-		
 		ciGrowthSaveAs();
+
 	}
 
 	/**
