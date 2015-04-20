@@ -33,30 +33,41 @@
 		</dependency>
 	</dependencies>
 
-	<plugin>
-		<artifactId>maven-assembly-plugin</artifactId>
-		<version>2.2</version>
-		<configuration>
-			<descriptorRefs>
-				<descriptorRef>jar-with-dependencies</descriptorRef>
-			</descriptorRefs>
-			<archive>
-				<manifest>
-					<mainClass>controller.DNBGen</mainClass>
-				</manifest>
-				<manifestEntries>
-					<Class-Path>.</Class-Path> <!-- HERE IS THE IMPORTANT BIT -->
-				</manifestEntries>
-			</archive>
-		</configuration>
-		<executions>
-			<execution>
-				<id>make-assembly</id> <!-- this is used for inheritance merges -->
-				<phase>package</phase> <!-- append to the packaging phase. -->
-				<goals>
-					<goal>single</goal> <!-- goals == mojos -->
-				</goals>
-			</execution>
-		</executions>
-	</plugin>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>controller.DNBGen</mainClass>
+						</manifest>
+						<manifestEntries>
+							<Class-Path>.</Class-Path> <!-- HERE IS THE IMPORTANT BIT -->
+						</manifestEntries>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- append to the packaging phase. -->
+						<goals>
+							<goal>single</goal> <!-- goals == mojos -->
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<targetPath>..</targetPath>
+			</resource>
+	    </resources>
+	</build>
+	
 </project>

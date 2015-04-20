@@ -49,23 +49,23 @@ public class CommonUtils {
 	 */
 	public static void geneateGdmCsv(String classPath) {
 
-		String propPath = classPath + "tempVariables.properties";
+//		String propPath = classPath + "tempVariables.properties";
 		
-		if (!"true".equals(CommonUtils.getValueByKeyFromConfig("has.generated.gdm.csv", propPath))) {
-			String periodCount = CommonUtils.getValueByKeyFromConfig("period.count", propPath);
-			String periodSampleCount = CommonUtils.getValueByKeyFromConfig("period.sample.count", propPath);
-			String cores = CommonUtils.getValueByKeyFromConfig("cores", propPath);
-			
+		if (!TempVar.HAS_GENERATED_GDM_CSV) {
+//			String periodCount = CommonUtils.getValueByKeyFromConfig("period.count", propPath);
+//			String periodSampleCount = CommonUtils.getValueByKeyFromConfig("period.sample.count", propPath);
+//			String cores = CommonUtils.getValueByKeyFromConfig("cores", propPath);
 			StringBuffer cmdSb = new StringBuffer();
 			cmdSb.append(classPath).append("core/cytoscape.R ").append(" -p ")
-					.append(classPath).append("  --period.count   ")
-					.append(periodCount).append("  --period.sample.count  ")
-					.append(periodSampleCount).append(" --cores ")
-					.append(cores);
+					.append(TempVar.WORK_SPACE).append("  --period.count   ")
+					.append(TempVar.PERIOD_COUNT).append("  --period.sample.count  ")
+					.append(TempVar.PERIOD_SAMPLE_COUNT).append(" --cores ")
+					.append(TempVar.CORES);
 			String cmd = cmdSb.toString();
 			log.info(cmd);
 			execShellCmd(cmd);
-			CommonUtils.storeValueByKeyFromConfig("has.generated.gdm.csv", "true", propPath);
+//			CommonUtils.storeValueByKeyFromConfig("has.generated.gdm.csv", "true", propPath);
+			TempVar.HAS_GENERATED_GDM_CSV = true;
 		}
 		
 	}
@@ -158,12 +158,5 @@ public class CommonUtils {
 			return false;
 		}
 		return true;
-	}
-
-	public static void main(String[] args) {
-		System.out.println(CommonUtils.getValueByKeyFromConfig("period.count",
-				"tempVariables.properties"));
-		System.out.println(CommonUtils.storeValueByKeyFromConfig(
-				"period.count", "81", "tempVariables.properties"));
 	}
 }

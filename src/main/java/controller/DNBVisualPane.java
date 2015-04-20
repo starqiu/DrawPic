@@ -18,8 +18,9 @@ import model.Node;
 
 import org.apache.log4j.Logger;
 
-import utils.CommonUtils;
+import utils.Constants;
 import utils.DnbUtils;
+import utils.TempVar;
 
 /*
  * ============================================================
@@ -45,13 +46,11 @@ import utils.DnbUtils;
 public class DNBVisualPane extends JPanel {
 	/** */
 	private static final long serialVersionUID = 2894886282413861500L;
-	public  int WINDOW_WIDTH=1024;
-	public  int WINDOW_LENGTH=768;
 	public final static Random random = new Random();
 	private  final  String classPath = this.getClass().getResource("/").getPath();
-	private  String workspace=CommonUtils.getValueByKeyFromConfig("work.space", classPath + "tempVariables.properties");
+//	private  String workspace=CommonUtils.getValueByKeyFromConfig("work.space", classPath + "tempVariables.properties");
 	private static final Logger log = Logger.getLogger(DNBVisualPane.class);
-	private BufferedImage paintImage = new BufferedImage(WINDOW_WIDTH, WINDOW_LENGTH, BufferedImage.TYPE_INT_RGB);
+	private BufferedImage paintImage = new BufferedImage(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHTH, BufferedImage.TYPE_INT_RGB);
 	private Map<String, Node> nodesMap = null;
 	private String period = null;
 
@@ -79,9 +78,9 @@ public class DNBVisualPane extends JPanel {
 	 * @param period
 	 */
 	private void drawAllNodesAndEdgesByPeriod(Graphics g) {
-		nodesMap = DnbUtils.getAllNodesByPeriod(workspace,
-				period, random, WINDOW_WIDTH, WINDOW_LENGTH, nodesMap);
-		List<Edge> edges = DnbUtils.getAllEdgesByPeriod(classPath, workspace,
+		nodesMap = DnbUtils.getAllNodesByPeriod(TempVar.WORK_SPACE,
+				period, random, Constants.WINDOW_WIDTH	, Constants.WINDOW_HEIGHTH, nodesMap);
+		List<Edge> edges = DnbUtils.getAllEdgesByPeriod(classPath, TempVar.WORK_SPACE,
 				period, nodesMap);
 
 		for (Node node : nodesMap.values()) {
@@ -128,8 +127,8 @@ public class DNBVisualPane extends JPanel {
 	
 	@Override
 	public void paint(Graphics g) { 
-		WINDOW_WIDTH = getWidth();
-		WINDOW_LENGTH = getHeight();
+//		WINDOW_WIDTH = getWidth();
+//		WINDOW_LENGTH = getHeight();
 		super.paint(g);
 	}
 

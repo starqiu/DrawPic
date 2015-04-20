@@ -6,6 +6,8 @@ import java.awt.EventQueue;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -30,18 +32,16 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import utils.CommonUtils;
+import utils.Constants;
 import utils.DnbUtils;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
+import utils.TempVar;
 
 /*
  * ============================================================
@@ -68,7 +68,6 @@ public class DNBGen extends JFrame {
 	/** */
 	private static final long serialVersionUID = 496091640493909358L;
 	private  final  String classPath = this.getClass().getResource("/").getPath();
-	private  String workspace=CommonUtils.getValueByKeyFromConfig("work.space", classPath + "tempVariables.properties");
 	private static final Logger log = Logger.getLogger(DNBGen.class);
 	private JPanel contentPane;
 	private JTextField txtWorkSpace;
@@ -96,8 +95,9 @@ public class DNBGen extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					log.info("Constants.PROJECT_DIR="+Constants.PROJECT_DIR);
 					DNBGen frame = new DNBGen();
-					frame.setSize(1024, 768);
+					frame.setSize(Constants.WINDOW_WIDTH,Constants.WINDOW_HEIGHTH);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					log.error("new frame failed!", e);
@@ -143,17 +143,33 @@ public class DNBGen extends JFrame {
 		});
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		
-		// add execute mode for R file
-		String corePath = classPath + "core/";
-		String addExeModCmd = "bash " + corePath + "addExeModAndRemoveOldFiles.sh " + corePath;
-		log.info("addExeModCmd: " + addExeModCmd);
-		CommonUtils.execShellCmd(addExeModCmd);
+		addExeMod();
 		
 		dnbGenTab(tabbedPane);
 		
 		ciGrowthTab(tabbedPane);
 		
 		dnbVisualTab(tabbedPane);
+	}
+
+	/**
+	 * add execute mode for R file
+	 */
+	private void addExeMod() {
+		String corePath = classPath + "core/";
+		String addExeModCmd = "bash " + corePath + "addExeMod.sh " + corePath;
+		log.info("addExeModCmd: " + addExeModCmd);
+		CommonUtils.execShellCmd(addExeModCmd);
+	}
+	
+	/**
+	 * 移除工作目录中的旧文件
+	 */
+	private void removeOldFiles() {
+		String corePath = classPath + "core/";
+		String removeOldFilesCmd = "bash " + corePath + "removeOldFiles.sh " + TempVar.WORK_SPACE;
+		log.info("addExeModCmd: " + removeOldFilesCmd);
+		CommonUtils.execShellCmd(removeOldFilesCmd);
 	}
 
 	/**
@@ -170,7 +186,7 @@ public class DNBGen extends JFrame {
 		dnbCanvasSaveAs();
 		dnbVisualTabLayout(lbldnbperiod, cmboxDNBPeriod);
 		
-		dnbVisualMain(cmboxDNBPeriod);
+//		dnbVisualMain(cmboxDNBPeriod);
 		
 		cmboxDNBPeriod.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -186,7 +202,7 @@ public class DNBGen extends JFrame {
 	 * @param cmboxDNBPeriod
 	 */
 	private void dnbVisualMain(JComboBox<String> cmboxDNBPeriod) {
-		String[] dnbPeriods = DnbUtils.getAllDnbPeriods(workspace);
+		String[] dnbPeriods = DnbUtils.getAllDnbPeriods(TempVar.WORK_SPACE);
 		if (null == dnbPeriods) {
 			log.error("no dnb,create DNB Visual Tab failed!");
 			return;
@@ -422,7 +438,7 @@ public class DNBGen extends JFrame {
 	 */
 	public void dnbGenMain() {
 
-		String basePath = txtWorkSpace.getText() + File.separator;
+		String workspace = txtWorkSpace.getText() + File.separator;
 		String caseFilePath = txtCaseFile.getText();
 		String controlFilePath = txtControlFile.getText();
 		String periodCount = txtPeriod.getText();
@@ -432,9 +448,16 @@ public class DNBGen extends JFrame {
 		String pccOutAmount = txtPccOutAmount.getText();
 		String cores = txtCores.getText();
 
+		TempVar.CORES = cores;
+		TempVar.PERIOD_COUNT = periodCount;
+		TempVar.PERIOD_SAMPLE_COUNT = periodSampleCount;
+		TempVar.WORK_SPACE = workspace;
+		
+		removeOldFiles();
+		
 		StringBuffer gdmCmd = new StringBuffer();
 		gdmCmd.append(classPath).append("core/gdm4Par.R ")
-				.append(" -p ").append(basePath)
+				.append(" -p ").append(workspace)
 				.append("  --case.file.path  ").append(caseFilePath)
 				.append("  --period.count   ").append(periodCount)
 				.append("  --period.sample.count  ")
@@ -453,11 +476,16 @@ public class DNBGen extends JFrame {
 		CommonUtils.execShellCmd(gdmCmd.toString());
 
 		// store cores, periodCount and periodSampleCount into file
-		String propPath = classPath + "tempVariables.properties";
-		CommonUtils.storeValueByKeyFromConfig("cores", cores, propPath);
-		CommonUtils.storeValueByKeyFromConfig("period.count", periodCount, propPath);
-		CommonUtils.storeValueByKeyFromConfig("period.sample.count", periodSampleCount, propPath);
-		CommonUtils.storeValueByKeyFromConfig("work.space", basePath, propPath);
+//		String propPath = classPath + "tempVariables.properties";
+//		CommonUtils.storeValueByKeyFromConfig("cores", cores, propPath);
+//		CommonUtils.storeValueByKeyFromConfig("period.count", periodCount, propPath);
+//		CommonUtils.storeValueByKeyFromConfig("period.sample.count", periodSampleCount, propPath);
+//		CommonUtils.storeValueByKeyFromConfig("work.space", basePath, propPath);
+		
+		//以便重载DNB时期
+		cmboxDNBPeriod.removeAllItems();
+		//以便重新生成gdm_XXX.csv
+		TempVar.HAS_GENERATED_GDM_CSV = false;
 	}
 	
 	/**

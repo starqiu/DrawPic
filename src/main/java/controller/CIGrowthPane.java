@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 
-import utils.CommonUtils;
+import utils.TempVar;
 
 /**
  * 实现功能：
@@ -35,9 +35,8 @@ import utils.CommonUtils;
 public class CIGrowthPane extends JPanel {
 	/** */
 	private static final long serialVersionUID = 8460166489772911187L;
-	private  final  String classPath = this.getClass().getResource("/").getPath();
+//	private  final  String classPath = this.getClass().getResource("/").getPath();
 	private static final Logger log = Logger.getLogger(CIGrowthPane.class);
-	private String workspace = CommonUtils.getValueByKeyFromConfig("work.space", classPath + "tempVariables.properties");
 	private BufferedImage paintImage = new BufferedImage(500, 400, BufferedImage.TYPE_3BYTE_BGR);
 
 	/**
@@ -71,7 +70,7 @@ public class CIGrowthPane extends JPanel {
 
 	public void load() {
 		try {
-			paintImage = ImageIO.read(new File(workspace+"ci.png"));
+			paintImage = ImageIO.read(new File(TempVar.WORK_SPACE+"ci.png"));
 		} catch (IOException e) {
 			log.error("load ci growth picture failed!", e);
 		}
