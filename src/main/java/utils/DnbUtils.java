@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -60,7 +61,7 @@ public final class DnbUtils {
 	public static Map<String, Node> getAllNodesByPeriod(
 			String workspace, String period, Random random, int maxWidth,
 			int maxHeight,Map<String, Node> nodesMap) {
-		if (nodesMap == null) {
+		if ((null == nodesMap) || !TempVar.HAS_GENERATED_GDM_CSV) {
 			nodesMap = new HashMap<String, Node>();
 			// HashMap<String, String> dnbMap = getDnbMapByPeriod(classPath,
 			// period);
@@ -124,19 +125,76 @@ public final class DnbUtils {
 		}
 		return edges;
 	}
+	
+	/**
+	 * 将相关的点通过邻接表聚合起来
+	 * @param classPath 类路径,R文件所在路径
+	 * @param workspace 工作目录
+	 * @param period 时期
+	 * @param nodesMap key为点的ID,value为对应的点
+	 * @return 
+	 */
+	public static  Map<String, List<String>> getRelatedNodeMapTogetherByPeriod(String classPath,
+			String workspace, String period, Map<String, Node> nodesMap) {
+		Map<String, List<String>> relatedNodeMap = new HashMap<String, List<String>>();
+		CommonUtils.geneateGdmCsv(classPath);
+		
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(new File(
+					workspace + "gdm_" + period + ".csv")));
+			// skip the title
+			br.readLine();
+			String[] line;
+//			Node source;
+//			Node target;
+			while (br.ready()) {
+				line = br.readLine().split(",");
+				
+				List<String> relatedSourceNode = relatedNodeMap.get(line[0]);
+				if (null == relatedSourceNode ) {
+					relatedSourceNode = new  LinkedList<String>();
+				}
+				relatedSourceNode.add(line[1]);
+				relatedNodeMap.put(line[0], relatedSourceNode);
+				
+				List<String> relatedTargetNode = relatedNodeMap.get(line[1]);
+				if (null == relatedTargetNode ) {
+					relatedTargetNode = new  LinkedList<String>();
+				}
+				relatedTargetNode.add(line[0]);
+				relatedNodeMap.put(line[1], relatedTargetNode);
+//				source = nodesMap.get(line[0]);
+//				target = nodesMap.get(line[1]);
+//				if (source.getLinkedNodes() == null) {
+//					source.setLinkedNodes(new LinkedList<Node>());
+//				}
+//				if (target.getLinkedNodes() == null) {
+//					target.setLinkedNodes(new LinkedList<Node>());
+//				}
+//				source.getLinkedNodes().add(target);
+//				target.getLinkedNodes().add(source);
+				
+//				nodesMap.put(line[0], source);
+//				nodesMap.put(line[1], target);
+			}
+			br.close();
+		} catch (IOException e) {
+			System.out.println("get all edges error! period=" + period);
+		}
+		return relatedNodeMap;
+	}
 
 	/**
 	 * change dnb list to map ,so it can indicate dnb genes from all genes
 	 * faster
 	 * 
-	 * @param classPath
+	 * @param workspace
 	 * @param period
 	 * @return
 	 */
-	@SuppressWarnings("unused")
-	private static HashMap<String, String> getDnbMapByPeriod(String classPath,
+	public static HashMap<String, String> getDnbMapByPeriod(String workspace,
 			String period) {
-		List<String> dnbIds = getDnbGeneIds(classPath, period);
+		List<String> dnbIds = getDnbGeneIds(workspace, period);
 
 		Iterator<String> dnbIter = dnbIds.iterator();
 		HashMap<String, String> dnbMap = new HashMap<String, String>();
@@ -146,30 +204,30 @@ public final class DnbUtils {
 		return dnbMap;
 	}
 
-	public static String[] getAllPeriods(String classPath) {
-		return getAllCIs(classPath).getCategories();
+	public static String[] getAllPeriods(String workspace) {
+		return getAllCIs(workspace).getCategories();
 	}
 
-	public static List<DnbData> getDnbDatas(String classPath) {
+	public static List<DnbData> getDnbDatas(String workspace) {
 		List<DnbData> dnbs = new ArrayList<DnbData>();
 
-		String[] periods = getAllDnbPeriods(classPath);
+		String[] periods = getAllDnbPeriods(workspace);
 
 		for (String period : periods) {
 			DnbData dnb = new DnbData();
 			dnb.setPeriod(period);
-			dnb.setIds(getDnbGeneIds(classPath, period));
+			dnb.setIds(getDnbGeneIds(workspace, period));
 			dnbs.add(dnb);
 		}
 		log.info("get DNB data successfully !");
 		return dnbs;
 	}
 
-	public static List<String> getDnbGeneIds(String classPath, String weekPeriod) {
+	public static List<String> getDnbGeneIds(String workspace, String weekPeriod) {
 		List<String> geneIds = new ArrayList<String>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(new File(
-					classPath + "matrix_table_" + weekPeriod + "_dnb.txt")));
+					workspace + "matrix_table_" + weekPeriod + "_dnb.txt")));
 			while (br.ready()) {
 				geneIds.add(br.readLine());
 			}
@@ -200,11 +258,11 @@ public final class DnbUtils {
 		return periods;
 	}
 
-	public static CiData getAllCIs(String classPath) {
+	public static CiData getAllCIs(String workspace) {
 		CiData ci = new CiData();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(new File(
-					classPath + "all_ci.txt")));
+					workspace + "all_ci.txt")));
 			ci.setCategories(br.readLine().split("\t"));
 
 			String[] dataStr = br.readLine().split("\t");

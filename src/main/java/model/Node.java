@@ -1,5 +1,8 @@
 package model;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /*
  * ============================================================
  * The SSE USTC Software License
@@ -13,7 +16,7 @@ package model;
  */
 
 /**
- * 实现功能：
+ * 实现功能：使用邻接表来存储点
  * <p>
  * date author email notes<br />
  * -------- --------------------------- ---------------<br />
@@ -66,5 +69,4 @@ public class Node {
 	public void setY(int y) {
 		this.y = y;
 	}
-
 }

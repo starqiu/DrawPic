@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -52,6 +53,8 @@ public class DNBVisualPane extends JPanel {
 	private static final Logger log = Logger.getLogger(DNBVisualPane.class);
 	private BufferedImage paintImage = new BufferedImage(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHTH, BufferedImage.TYPE_INT_RGB);
 	private Map<String, Node> nodesMap = null;
+	private Map<String, Node> dnbNodesMap = null;
+	private Map<String, Node> notDnbNodesMap = null;
 	private String period = null;
 
 	public DNBVisualPane() {
@@ -80,17 +83,29 @@ public class DNBVisualPane extends JPanel {
 	private void drawAllNodesAndEdgesByPeriod(Graphics g) {
 		nodesMap = DnbUtils.getAllNodesByPeriod(TempVar.WORK_SPACE,
 				period, random, Constants.WINDOW_WIDTH	, Constants.WINDOW_HEIGHTH, nodesMap);
-		List<Edge> edges = DnbUtils.getAllEdgesByPeriod(classPath, TempVar.WORK_SPACE,
+//		log.info("nodemap="+nodesMap);
+		Map<String, List<String>> relatedNodeMap = DnbUtils.getRelatedNodeMapTogetherByPeriod(classPath, TempVar.WORK_SPACE,
 				period, nodesMap);
 
+		int radiusOfNode = 5;//点的半径
 		for (Node node : nodesMap.values()) {
-			g.drawLine(node.getX(), node.getY(), node.getX(), node.getY());
+			g.fillOval(node.getX(), node.getY(), radiusOfNode, radiusOfNode);
+//			g.drawLine(node.getX(), node.getY(), node.getX(), node.getY());
+		}
+		
+		for (Entry<String, List<String>> nodeEntry : relatedNodeMap.entrySet()) {
+			Node sourceNode = nodesMap.get(nodeEntry.getKey());
+			Node targetNode = null;
+			for ( String targetNodeId : nodeEntry.getValue()) {
+				targetNode = nodesMap.get(targetNodeId);
+				g.drawLine(sourceNode.getX(), sourceNode.getY(), targetNode.getX(), targetNode.getY());
+			}
 		}
 
-		for (Edge edge : edges) {
-			g.drawLine(edge.getSource().getX(), edge.getSource().getY(), edge
-					.getTarget().getX(), edge.getTarget().getY());
-		}
+//		for (Edge edge : edges) {
+//			g.drawLine(edge.getSource().getX(), edge.getSource().getY(), edge
+//					.getTarget().getX(), edge.getTarget().getY());
+//		}
 	}
 	
 	// draw painting
