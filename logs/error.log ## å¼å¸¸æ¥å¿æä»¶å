@@ -1,18 +1,87 @@
-2015-04-20 09:06:24  [ AWT-EventQueue-0:0 ] - [ INFO ]  Constants.PROJECT_DIR=/home/starqiu/DNBWorkspace/DrawPic
-2015-04-20 09:06:24  [ AWT-EventQueue-0:674 ] - [ INFO ]  addExeModCmd: bash /home/starqiu/DNBWorkspace/DrawPic/target/classes/core/addExeMod.sh /home/starqiu/DNBWorkspace/DrawPic/target/classes/core/
-2015-04-20 09:06:24  [ AWT-EventQueue-0:699 ] - [ INFO ]  add execute mode for  R files
-2015-04-20 09:06:25  [ AWT-EventQueue-0:901 ] - [ INFO ]  总用量 96
-2015-04-20 09:06:25  [ AWT-EventQueue-0:902 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu   166  4月 18 21:49 addExeMod.sh
-2015-04-20 09:06:25  [ AWT-EventQueue-0:902 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu 10242  4月 16 10:08 bk_gdm4Par_saved_cor_matrix.R
-2015-04-20 09:06:25  [ AWT-EventQueue-0:903 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  4294  4月 16 10:08 calcAndPlotDnbCIEveryPeriod.R
-2015-04-20 09:06:25  [ AWT-EventQueue-0:906 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  3478  4月 16 10:08 calcModuleCI.R
-2015-04-20 09:06:25  [ AWT-EventQueue-0:907 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  7305  4月 16 10:08 cytoscape.R
-2015-04-20 09:06:25  [ AWT-EventQueue-0:908 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  1443  4月 16 10:08 divideCaseAndControl.R
-2015-04-20 09:06:25  [ AWT-EventQueue-0:919 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu   466  4月 16 10:08 formatGSE64538.R
-2015-04-20 09:06:25  [ AWT-EventQueue-0:919 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu 17971  4月 16 18:10 gdm4Par.R
-2015-04-20 09:06:25  [ AWT-EventQueue-0:920 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu 16541  4月 16 10:08 gdm.R
-2015-04-20 09:06:25  [ AWT-EventQueue-0:920 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu    93  4月 19 16:39 removeOldFiles.sh
-2015-04-20 09:06:25  [ AWT-EventQueue-0:920 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu    93  4月 19 16:39 removeOldFiles.sh~
-2015-04-20 09:06:25  [ AWT-EventQueue-0:920 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu   201  4月 16 10:08 tmp.R
-2015-04-20 09:06:25  [ AWT-EventQueue-0:920 ] - [ INFO ]  execute shell command successfully!
-2015-04-20 09:06:25  [ AWT-EventQueue-0:922 ] - [ INFO ]  Tab index = 0
+2015-04-22 10:26:38  [ AWT-EventQueue-0:0 ] - [ INFO ]  Constants.PROJECT_DIR=/home/starqiu/DNBWorkspace/DrawPic
+2015-04-22 10:26:38  [ AWT-EventQueue-0:530 ] - [ INFO ]  addExeModCmd: bash /home/starqiu/DNBWorkspace/DrawPic/target/classes/core/addExeMod.sh /home/starqiu/DNBWorkspace/DrawPic/target/classes/core/
+2015-04-22 10:26:38  [ AWT-EventQueue-0:632 ] - [ INFO ]  add execute mode for  R files
+2015-04-22 10:26:38  [ AWT-EventQueue-0:712 ] - [ INFO ]  总用量 96
+2015-04-22 10:26:38  [ AWT-EventQueue-0:713 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu   166  4月 18 21:49 addExeMod.sh
+2015-04-22 10:26:38  [ AWT-EventQueue-0:714 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu 10242  4月 16 10:08 bk_gdm4Par_saved_cor_matrix.R
+2015-04-22 10:26:38  [ AWT-EventQueue-0:715 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  4294  4月 16 10:08 calcAndPlotDnbCIEveryPeriod.R
+2015-04-22 10:26:38  [ AWT-EventQueue-0:716 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  3478  4月 16 10:08 calcModuleCI.R
+2015-04-22 10:26:38  [ AWT-EventQueue-0:718 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  7305  4月 16 10:08 cytoscape.R
+2015-04-22 10:26:38  [ AWT-EventQueue-0:732 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  1443  4月 16 10:08 divideCaseAndControl.R
+2015-04-22 10:26:38  [ AWT-EventQueue-0:732 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu   466  4月 16 10:08 formatGSE64538.R
+2015-04-22 10:26:38  [ AWT-EventQueue-0:732 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu 17971  4月 16 18:10 gdm4Par.R
+2015-04-22 10:26:38  [ AWT-EventQueue-0:733 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu 16541  4月 16 10:08 gdm.R
+2015-04-22 10:26:38  [ AWT-EventQueue-0:733 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu    93  4月 19 16:39 removeOldFiles.sh
+2015-04-22 10:26:38  [ AWT-EventQueue-0:734 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu    93  4月 19 16:39 removeOldFiles.sh~
+2015-04-22 10:26:38  [ AWT-EventQueue-0:734 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu   201  4月 16 10:08 tmp.R
+2015-04-22 10:26:38  [ AWT-EventQueue-0:736 ] - [ INFO ]  execute shell command successfully!
+2015-04-22 10:26:38  [ AWT-EventQueue-0:738 ] - [ INFO ]  Tab index = 0
+2015-04-22 10:26:42  [ AWT-EventQueue-0:4259 ] - [ INFO ]  Tab index = 2
+2015-04-22 10:26:42  [ AWT-EventQueue-0:4335 ] - [ INFO ]  periods:[1, 3]
+2015-04-22 10:26:42  [ AWT-EventQueue-0:4358 ] - [ INFO ]  node file path is /host/data/matrix_table_1_all_genes.txt
+2015-04-22 10:26:42  [ AWT-EventQueue-0:4523 ] - [ INFO ]  /home/starqiu/DNBWorkspace/DrawPic/target/classes/core/cytoscape.R  -p /host/data/  --period.count   5  --period.sample.count  5 --cores 6
+2015-04-22 10:26:44  [ AWT-EventQueue-0:6012 ] - [ INFO ]  [1] "-p"                    "/host/data/"           "--period.count"       
+2015-04-22 10:26:44  [ AWT-EventQueue-0:6014 ] - [ INFO ]  [4] "5"                     "--period.sample.count" "5"                    
+2015-04-22 10:26:44  [ AWT-EventQueue-0:6016 ] - [ INFO ]  [7] "--cores"               "6"                    
+2015-04-22 10:26:44  [ AWT-EventQueue-0:6022 ] - [ INFO ]  [1] "working directory :  /host/data/"
+2015-04-22 10:26:45  [ AWT-EventQueue-0:7445 ] - [ INFO ]   用户  系统  流逝 
+2015-04-22 10:26:45  [ AWT-EventQueue-0:7445 ] - [ INFO ]  0.768 0.083 1.435 
+2015-04-22 10:26:45  [ AWT-EventQueue-0:7497 ] - [ INFO ]  execute shell command successfully!
+2015-04-22 10:27:53  [ AWT-EventQueue-0:0 ] - [ INFO ]  Constants.PROJECT_DIR=/home/starqiu/DNBWorkspace/DrawPic
+2015-04-22 10:27:53  [ AWT-EventQueue-0:218 ] - [ INFO ]  addExeModCmd: bash /home/starqiu/DNBWorkspace/DrawPic/target/classes/core/addExeMod.sh /home/starqiu/DNBWorkspace/DrawPic/target/classes/core/
+2015-04-22 10:27:53  [ AWT-EventQueue-0:234 ] - [ INFO ]  add execute mode for  R files
+2015-04-22 10:27:54  [ AWT-EventQueue-0:256 ] - [ INFO ]  总用量 96
+2015-04-22 10:27:54  [ AWT-EventQueue-0:257 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu   166  4月 18 21:49 addExeMod.sh
+2015-04-22 10:27:54  [ AWT-EventQueue-0:258 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu 10242  4月 16 10:08 bk_gdm4Par_saved_cor_matrix.R
+2015-04-22 10:27:54  [ AWT-EventQueue-0:262 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  4294  4月 16 10:08 calcAndPlotDnbCIEveryPeriod.R
+2015-04-22 10:27:54  [ AWT-EventQueue-0:263 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  3478  4月 16 10:08 calcModuleCI.R
+2015-04-22 10:27:54  [ AWT-EventQueue-0:264 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  7305  4月 16 10:08 cytoscape.R
+2015-04-22 10:27:54  [ AWT-EventQueue-0:265 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  1443  4月 16 10:08 divideCaseAndControl.R
+2015-04-22 10:27:54  [ AWT-EventQueue-0:267 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu   466  4月 16 10:08 formatGSE64538.R
+2015-04-22 10:27:54  [ AWT-EventQueue-0:268 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu 17971  4月 16 18:10 gdm4Par.R
+2015-04-22 10:27:54  [ AWT-EventQueue-0:268 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu 16541  4月 16 10:08 gdm.R
+2015-04-22 10:27:54  [ AWT-EventQueue-0:269 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu    93  4月 19 16:39 removeOldFiles.sh
+2015-04-22 10:27:54  [ AWT-EventQueue-0:271 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu    93  4月 19 16:39 removeOldFiles.sh~
+2015-04-22 10:27:54  [ AWT-EventQueue-0:271 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu   201  4月 16 10:08 tmp.R
+2015-04-22 10:27:54  [ AWT-EventQueue-0:272 ] - [ INFO ]  execute shell command successfully!
+2015-04-22 10:27:54  [ AWT-EventQueue-0:273 ] - [ INFO ]  Tab index = 0
+2015-04-22 10:27:55  [ AWT-EventQueue-0:1756 ] - [ INFO ]  Tab index = 2
+2015-04-22 10:27:55  [ AWT-EventQueue-0:1767 ] - [ INFO ]  periods:[1, 3]
+2015-04-22 10:27:55  [ AWT-EventQueue-0:1773 ] - [ INFO ]  node file path is /host/data/matrix_table_1_all_genes.txt
+2015-04-22 10:27:55  [ AWT-EventQueue-0:1926 ] - [ INFO ]  /home/starqiu/DNBWorkspace/DrawPic/target/classes/core/cytoscape.R  -p /host/data/  --period.count   5  --period.sample.count  5 --cores 6
+2015-04-22 10:27:55  [ AWT-EventQueue-0:2222 ] - [ INFO ]  [1] "-p"                    "/host/data/"           "--period.count"       
+2015-04-22 10:27:55  [ AWT-EventQueue-0:2223 ] - [ INFO ]  [4] "5"                     "--period.sample.count" "5"                    
+2015-04-22 10:27:55  [ AWT-EventQueue-0:2223 ] - [ INFO ]  [7] "--cores"               "6"                    
+2015-04-22 10:27:56  [ AWT-EventQueue-0:2302 ] - [ INFO ]  [1] "working directory :  /host/data/"
+2015-04-22 10:27:57  [ AWT-EventQueue-0:3284 ] - [ INFO ]   用户  系统  流逝 
+2015-04-22 10:27:57  [ AWT-EventQueue-0:3284 ] - [ INFO ]  0.686 0.085 1.063 
+2015-04-22 10:27:57  [ AWT-EventQueue-0:3291 ] - [ INFO ]  execute shell command successfully!
+2015-04-22 10:31:52  [ AWT-EventQueue-0:0 ] - [ INFO ]  Constants.PROJECT_DIR=/home/starqiu/DNBWorkspace/DrawPic
+2015-04-22 10:31:52  [ AWT-EventQueue-0:210 ] - [ INFO ]  addExeModCmd: bash /home/starqiu/DNBWorkspace/DrawPic/target/classes/core/addExeMod.sh /home/starqiu/DNBWorkspace/DrawPic/target/classes/core/
+2015-04-22 10:31:52  [ AWT-EventQueue-0:217 ] - [ INFO ]  add execute mode for  R files
+2015-04-22 10:31:52  [ AWT-EventQueue-0:221 ] - [ INFO ]  总用量 96
+2015-04-22 10:31:52  [ AWT-EventQueue-0:221 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu   166  4月 18 21:49 addExeMod.sh
+2015-04-22 10:31:52  [ AWT-EventQueue-0:221 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu 10242  4月 16 10:08 bk_gdm4Par_saved_cor_matrix.R
+2015-04-22 10:31:52  [ AWT-EventQueue-0:221 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  4294  4月 16 10:08 calcAndPlotDnbCIEveryPeriod.R
+2015-04-22 10:31:52  [ AWT-EventQueue-0:222 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  3478  4月 16 10:08 calcModuleCI.R
+2015-04-22 10:31:52  [ AWT-EventQueue-0:222 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  7305  4月 16 10:08 cytoscape.R
+2015-04-22 10:31:52  [ AWT-EventQueue-0:222 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu  1443  4月 16 10:08 divideCaseAndControl.R
+2015-04-22 10:31:52  [ AWT-EventQueue-0:231 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu   466  4月 16 10:08 formatGSE64538.R
+2015-04-22 10:31:52  [ AWT-EventQueue-0:233 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu 17971  4月 16 18:10 gdm4Par.R
+2015-04-22 10:31:52  [ AWT-EventQueue-0:233 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu 16541  4月 16 10:08 gdm.R
+2015-04-22 10:31:52  [ AWT-EventQueue-0:233 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu    93  4月 19 16:39 removeOldFiles.sh
+2015-04-22 10:31:52  [ AWT-EventQueue-0:234 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu    93  4月 19 16:39 removeOldFiles.sh~
+2015-04-22 10:31:52  [ AWT-EventQueue-0:234 ] - [ INFO ]  -rwxrwxr-x 1 starqiu starqiu   201  4月 16 10:08 tmp.R
+2015-04-22 10:31:52  [ AWT-EventQueue-0:234 ] - [ INFO ]  execute shell command successfully!
+2015-04-22 10:31:52  [ AWT-EventQueue-0:236 ] - [ INFO ]  Tab index = 0
+2015-04-22 10:31:54  [ AWT-EventQueue-0:1771 ] - [ INFO ]  Tab index = 2
+2015-04-22 10:31:54  [ AWT-EventQueue-0:1785 ] - [ INFO ]  periods:[1, 3]
+2015-04-22 10:31:54  [ AWT-EventQueue-0:1789 ] - [ INFO ]  node file path is /host/data/matrix_table_1_all_genes.txt
+2015-04-22 10:31:54  [ AWT-EventQueue-0:1918 ] - [ INFO ]  /home/starqiu/DNBWorkspace/DrawPic/target/classes/core/cytoscape.R  -p /host/data/  --period.count   5  --period.sample.count  5 --cores 6
+2015-04-22 10:31:54  [ AWT-EventQueue-0:2217 ] - [ INFO ]  [1] "-p"                    "/host/data/"           "--period.count"       
+2015-04-22 10:31:54  [ AWT-EventQueue-0:2218 ] - [ INFO ]  [4] "5"                     "--period.sample.count" "5"                    
+2015-04-22 10:31:54  [ AWT-EventQueue-0:2219 ] - [ INFO ]  [7] "--cores"               "6"                    
+2015-04-22 10:31:54  [ AWT-EventQueue-0:2221 ] - [ INFO ]  [1] "working directory :  /host/data/"
+2015-04-22 10:31:55  [ AWT-EventQueue-0:3089 ] - [ INFO ]   用户  系统  流逝 
+2015-04-22 10:31:55  [ AWT-EventQueue-0:3090 ] - [ INFO ]  0.679 0.064 0.873 
+2015-04-22 10:31:55  [ AWT-EventQueue-0:3099 ] - [ INFO ]  execute shell command successfully!

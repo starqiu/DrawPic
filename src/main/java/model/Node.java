@@ -1,4 +1,5 @@
 package model;
+
 /*
  * ============================================================
  * The SSE USTC Software License
@@ -21,10 +22,13 @@ package model;
  *
  */
 public class Node {
-	public int x;
-	public int y;
-	public String id;
+	private int x;
+	private int y;
+	private String id;
 
+	public Node(){
+		super();
+	}
 	public String getId() {
 		return id;
 	}
