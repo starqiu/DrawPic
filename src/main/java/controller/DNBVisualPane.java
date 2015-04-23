@@ -60,7 +60,7 @@ public class DNBVisualPane extends JPanel {
 	/** */
 	private static final long serialVersionUID = 2894886282413861500L;
 	public final static Random random = new Random();
-	private  final  String classPath = this.getClass().getResource("/").getPath();
+	private  final  String classPath = new File(this.getClass().getResource("/").getPath()).getAbsolutePath()+File.separator;
 //	private  String workspace=CommonUtils.getValueByKeyFromConfig("work.space", classPath + "tempVariables.properties");
 	private static final Logger log = Logger.getLogger(DNBVisualPane.class);
 	private BufferedImage paintImage = new BufferedImage(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHTH, BufferedImage.TYPE_INT_RGB);

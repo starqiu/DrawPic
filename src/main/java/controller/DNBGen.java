@@ -67,7 +67,7 @@ public class DNBGen extends JFrame {
 	
 	/** */
 	private static final long serialVersionUID = 496091640493909358L;
-	private  final  String classPath = this.getClass().getResource("/").getPath();
+	private  final  String classPath = new File(this.getClass().getResource("/").getPath()).getAbsolutePath()+File.separator;
 	private static final Logger log = Logger.getLogger(DNBGen.class);
 	private JPanel contentPane;
 	private JTextField txtWorkSpace;
@@ -456,7 +456,7 @@ public class DNBGen extends JFrame {
 //		removeOldFiles();
 		
 		StringBuffer gdmCmd = new StringBuffer();
-		gdmCmd.append("Rscript ").append(classPath).append("core/gdm4Par.R ")
+		gdmCmd.append("Rscript ").append(classPath).append("core").append(File.separator).append("gdm4Par.R ")
 				.append(" -p ").append(workspace)
 				.append("  --case.file.path  ").append(caseFilePath)
 				.append("  --period.count   ").append(periodCount)
