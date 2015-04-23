@@ -56,7 +56,7 @@ public class CommonUtils {
 //			String periodSampleCount = CommonUtils.getValueByKeyFromConfig("period.sample.count", propPath);
 //			String cores = CommonUtils.getValueByKeyFromConfig("cores", propPath);
 			StringBuffer cmdSb = new StringBuffer();
-			cmdSb.append(classPath).append("core/cytoscape.R ").append(" -p ")
+			cmdSb.append("Rscript ").append(classPath).append("core/cytoscape.R ").append(" -p ")
 					.append(TempVar.WORK_SPACE).append("  --period.count   ")
 					.append(TempVar.PERIOD_COUNT).append("  --period.sample.count  ")
 					.append(TempVar.PERIOD_SAMPLE_COUNT).append(" --cores ")

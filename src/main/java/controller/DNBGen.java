@@ -143,7 +143,7 @@ public class DNBGen extends JFrame {
 		});
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		
-		addExeMod();
+//		addExeMod();
 		
 		dnbGenTab(tabbedPane);
 		
@@ -453,10 +453,10 @@ public class DNBGen extends JFrame {
 		TempVar.PERIOD_SAMPLE_COUNT = periodSampleCount;
 		TempVar.WORK_SPACE = workspace;
 		
-		removeOldFiles();
+//		removeOldFiles();
 		
 		StringBuffer gdmCmd = new StringBuffer();
-		gdmCmd.append(classPath).append("core/gdm4Par.R ")
+		gdmCmd.append("Rscript ").append(classPath).append("core/gdm4Par.R ")
 				.append(" -p ").append(workspace)
 				.append("  --case.file.path  ").append(caseFilePath)
 				.append("  --period.count   ").append(periodCount)
@@ -468,8 +468,7 @@ public class DNBGen extends JFrame {
 				.append(" --pcc.out.amount  ").append(pccOutAmount)
 				.append(" --cores ").append(cores);
 		if (!controlFilePath.isEmpty()) {
-			gdmCmd.append("  --control.file.path  ").append(
-					controlFilePath);
+			gdmCmd.append("  --control.file.path  ").append(controlFilePath);
 		}
 
 		log.info("gdmCmd:" + gdmCmd.toString());

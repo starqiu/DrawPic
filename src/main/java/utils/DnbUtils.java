@@ -130,7 +130,7 @@ public final class DnbUtils {
 				Edge edge = new Edge();
 				edge.setSource(nodesMap.get(line[0]));
 				edge.setTarget(nodesMap.get(line[1]));
-				edge.setId(line[2]);
+//				edge.setId(line[2]);
 				edges.add(edge);
 			}
 			br.close();
