@@ -24,7 +24,10 @@ public class Constants {
 	public static final int WINDOW_WIDTH = 1024;
 	/** 窗体高度*/
 	public static final int WINDOW_HEIGHTH = 768;
+	/** 项目目录*/
 	public static final String PROJECT_DIR = System.getProperty("user.dir");
+	/** 画布个模块之间的间距*/
+	public static final int CANVAS_MODULE_MARGIN = 50;
 
 }
 

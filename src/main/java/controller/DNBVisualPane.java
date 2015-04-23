@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 
 import model.Edge;
 import model.Node;
+import model.NodeType;
 
 import org.apache.log4j.Logger;
 
@@ -36,7 +37,18 @@ import utils.TempVar;
  */
 
 /**
- * 实现功能：DNB 可视化
+ * 实现功能：DNB 可视化,样式如下:<br/>
+ * _________________________________________________________________<br />
+ * |                                                             |  |                                     |<br />
+ * |                                                             |  |       custom               |<br />
+ * |                                                             |  |         DNB                   |<br />
+ * |                                                             |  |______________________ |<br />
+ * |         not DNB                                   |  |______________________ |<br />
+ * |                                                             |  |                                     |<br />
+ * |                                                             |  |      Gen DNB             |<br />
+ * |                                                             |  |                                     |<br />
+ * |                                                             |  |                                     |<br />
+ * |____________________________________ |_ |______________________|<br />
  * <p>
  * date author email notes<br />
  * -------- --------------------------- ---------------<br />
@@ -53,8 +65,6 @@ public class DNBVisualPane extends JPanel {
 	private static final Logger log = Logger.getLogger(DNBVisualPane.class);
 	private BufferedImage paintImage = new BufferedImage(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHTH, BufferedImage.TYPE_INT_RGB);
 	private Map<String, Node> nodesMap = null;
-	private Map<String, Node> dnbNodesMap = null;
-	private Map<String, Node> notDnbNodesMap = null;
 	private String period = null;
 
 	public DNBVisualPane() {
@@ -79,6 +89,7 @@ public class DNBVisualPane extends JPanel {
 	/**
 	 * @param g
 	 * @param period
+	 * 
 	 */
 	private void drawAllNodesAndEdgesByPeriod(Graphics g) {
 		nodesMap = DnbUtils.getAllNodesByPeriod(TempVar.WORK_SPACE,
@@ -89,7 +100,20 @@ public class DNBVisualPane extends JPanel {
 
 		int radiusOfNode = 5;//点的半径
 		for (Node node : nodesMap.values()) {
-			g.fillOval(node.getX(), node.getY(), radiusOfNode, radiusOfNode);
+			switch (node.getNodeType()) {
+			case NOT_DNB:
+				g.fillOval(node.getX(), node.getY(), radiusOfNode, radiusOfNode);
+				break;
+			case DNB:
+				g.setColor(Color.RED);
+				g.fillOval(node.getX(), node.getY(), radiusOfNode*4, radiusOfNode*4);
+				g.setColor(Color.BLACK);
+				break;
+
+			default:
+				break;
+			}
+//			g.fillOval(node.getX(), node.getY(), radiusOfNode, radiusOfNode);
 //			g.drawLine(node.getX(), node.getY(), node.getX(), node.getY());
 		}
 		
@@ -98,7 +122,14 @@ public class DNBVisualPane extends JPanel {
 			Node targetNode = null;
 			for ( String targetNodeId : nodeEntry.getValue()) {
 				targetNode = nodesMap.get(targetNodeId);
-				g.drawLine(sourceNode.getX(), sourceNode.getY(), targetNode.getX(), targetNode.getY());
+				if (sourceNode.getNodeType() == NodeType.NOT_DNB  &&
+					targetNode.getNodeType() == NodeType.NOT_DNB ) {
+					g.drawLine(sourceNode.getX(), sourceNode.getY(), targetNode.getX(), targetNode.getY());
+				}else {
+					g.setColor(Color.YELLOW);
+					g.drawLine(sourceNode.getX(), sourceNode.getY(), targetNode.getX(), targetNode.getY());
+					g.setColor(Color.BLACK);
+				}
 			}
 		}
 

@@ -28,6 +28,7 @@ public class Node {
 	private int x;
 	private int y;
 	private String id;
+	private NodeType nodeType;
 
 	public Node(){
 		super();
@@ -68,5 +69,11 @@ public class Node {
 	 */
 	public void setY(int y) {
 		this.y = y;
+	}
+	public NodeType getNodeType() {
+		return nodeType;
+	}
+	public void setNodeType(NodeType nodeType) {
+		this.nodeType = nodeType;
 	}
 }

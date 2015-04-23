@@ -28,6 +28,7 @@ import model.CiData;
 import model.DnbData;
 import model.Edge;
 import model.Node;
+import model.NodeType;
 
 import org.apache.log4j.Logger;
 
@@ -63,9 +64,13 @@ public final class DnbUtils {
 			int maxHeight,Map<String, Node> nodesMap) {
 		if ((null == nodesMap) || !TempVar.HAS_GENERATED_GDM_CSV) {
 			nodesMap = new HashMap<String, Node>();
-			// HashMap<String, String> dnbMap = getDnbMapByPeriod(classPath,
-			// period);
+			 HashMap<String, String> dnbMap = getDnbMapByPeriod(workspace,period);
 
+			 int notDNBMaxWidth = (int) (maxWidth * 0.8);
+			 int dnbMinWidth = notDNBMaxWidth + Constants.CANVAS_MODULE_MARGIN;
+			 int dnbMinHeight = (maxHeight + Constants.CANVAS_MODULE_MARGIN)>>1 ;
+			 int dnbWidth = maxWidth - dnbMinWidth;
+			 int dnbHeight = maxHeight - dnbMinHeight ;
 			try {
 				BufferedReader idBr = new BufferedReader(new FileReader(
 						new File(workspace + "matrix_table_" + period
@@ -78,8 +83,17 @@ public final class DnbUtils {
 				while (idBr.ready()) {
 					Node node = new Node();
 					node.setId(idBr.readLine());
-					node.setX(random.nextInt(maxWidth));
-					node.setY(random.nextInt(maxHeight));
+
+					if (null == dnbMap.get(node.getId())) {
+						node.setNodeType(NodeType.NOT_DNB);
+						node.setX(random.nextInt(notDNBMaxWidth));
+						node.setY(random.nextInt(maxHeight));
+					}else {
+						node.setNodeType(NodeType.DNB);
+						node.setX(random.nextInt(dnbWidth) + dnbMinWidth);
+						node.setY(random.nextInt(dnbHeight) + dnbMinHeight);
+					}
+					
 					nodesMap.put(node.getId(), node);
 				}
 
