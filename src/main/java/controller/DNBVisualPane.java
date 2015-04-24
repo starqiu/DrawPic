@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Window;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -67,6 +68,7 @@ public class DNBVisualPane extends JPanel {
 	private static final Logger log = Logger.getLogger(DNBVisualPane.class);
 	private BufferedImage paintImage = new BufferedImage(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHTH, BufferedImage.TYPE_INT_RGB);
 	private Map<String, Node> nodesMap = null;
+	private String customDnb ;
 	private String period = null;
 	private Color dnbNodeColor;
 	private Color notDnbNodeColor;
@@ -95,31 +97,56 @@ public class DNBVisualPane extends JPanel {
 	}
 
 	/**
+	 * 绘制所有的顶点和边
 	 * @param g
 	 * @param period
 	 * 
 	 */
 	private void drawAllNodesAndEdgesByPeriod(Graphics g) {
 		nodesMap = DnbUtils.getAllNodesByPeriod(TempVar.WORK_SPACE,
-				period, random, Constants.WINDOW_WIDTH	, Constants.WINDOW_HEIGHTH, nodesMap);
+				period, random, Constants.WINDOW_WIDTH, 
+				Constants.WINDOW_HEIGHTH, nodesMap, customDnb);
 //		log.info("nodemap="+nodesMap);
 		Map<String, List<String>> relatedNodeMap = DnbUtils.getRelatedNodeMapTogetherByPeriod(classPath, TempVar.WORK_SPACE,
 				period, nodesMap);
-
-		int radiusOfNode = 5;//点的半径
+		
+		drawAreaBorder(g, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHTH);
+		 
+		int radiusOfNode = 5;//点为圆形时的半径
 		switch (nodeShape) {
 		case CIRCLE:
 			drawCircleNode(g, radiusOfNode);
 			break;
-
-		default:
+		case RECTANGLE:
 			drawRectangleNode(g, radiusOfNode);
+			break;
+		default:
 			break;
 		}
 
 		drawEdges(g, relatedNodeMap);
 
 	}
+	
+	/**
+	 * 绘制区域的边界
+	 * @param g
+	 * @param maxWidth 画布的宽度
+	 * @param maxHeight 画布的长度
+	 */
+	private void drawAreaBorder(Graphics g, int maxWidth, int maxHeight) {
+		int notDNBMaxWidth = (int) (maxWidth * 0.8);
+		int dnbMinWidth = notDNBMaxWidth + Constants.CANVAS_MODULE_MARGIN;
+		int dnbMinHeight = (maxHeight + Constants.CANVAS_MODULE_MARGIN) >> 1;
+		int dnbHeight = maxHeight - dnbMinHeight;
+		g.setColor(Color.BLUE);
+		g.drawPolygon(new int[]{notDNBMaxWidth,notDNBMaxWidth,dnbMinWidth,
+								dnbMinWidth,maxWidth,maxWidth,
+								dnbMinWidth,dnbMinWidth}, 
+					  new int[]{0,maxHeight,maxHeight,dnbMinHeight,
+								dnbMinHeight,dnbHeight,dnbHeight,0}, 8);
+	}
+	
 	/**
 	 * 绘制所有的边
 	 * @param g
@@ -156,6 +183,7 @@ public class DNBVisualPane extends JPanel {
 				g.fillOval(node.getX(), node.getY(), radiusOfNode, radiusOfNode);
 				break;
 			case DNB:
+			case CUSTOM_DNB:
 				g.setColor(getDnbNodeColor());
 				g.fillOval(node.getX(), node.getY(), radiusOfNode*4, radiusOfNode*4);
 				break;
@@ -179,6 +207,7 @@ public class DNBVisualPane extends JPanel {
 				g.fillRect(node.getX(), node.getY(), radiusOfNode, radiusOfNode);
 				break;
 			case DNB:
+			case CUSTOM_DNB:
 				g.setColor(getDnbNodeColor());
 				g.fillRect(node.getX(), node.getY(), radiusOfNode*4, radiusOfNode*4);
 				break;
@@ -271,5 +300,11 @@ public class DNBVisualPane extends JPanel {
 	}
 	public void setNodeShape(NodeShape nodeShape) {
 		this.nodeShape = nodeShape;
+	}
+	public String getCustomDnb() {
+		return customDnb;
+	}
+	public void setCustomDnb(String customDnb) {
+		this.customDnb = customDnb;
 	}
 }

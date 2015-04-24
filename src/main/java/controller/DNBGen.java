@@ -36,6 +36,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import model.NodeShape;
 import model.NodeType;
@@ -47,6 +49,11 @@ import utils.CommonUtils;
 import utils.Constants;
 import utils.DnbUtils;
 import utils.TempVar;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
 
 /*
  * ============================================================
@@ -110,6 +117,8 @@ public class DNBGen extends JFrame {
 	private JButton btnNotDnbNodeColor;
 	private JButton btnDnbEdgeColor;
 	private JButton btnNotDnbEdgeColor;
+	private JLabel lbldnb;
+	private JTextField txtCustomDnb;
 
 	/**
 	 * Launch the application.
@@ -347,38 +356,68 @@ public class DNBGen extends JFrame {
 		dnbCanvas.setDnbEdgeColor(btnDnbEdgeColor.getBackground());
 		dnbCanvas.setNotDnbEdgeColor(btnNotDnbEdgeColor.getBackground());
 		
+		lbldnb = new JLabel("自定义DNB（以,分割）：");
+		
+		txtCustomDnb = new JTextField();
+		txtCustomDnb.getDocument().addDocumentListener(new DocumentListener() {
+			
+			public void removeUpdate(DocumentEvent e) {
+				setValues();
+			}
+			
+			public void insertUpdate(DocumentEvent e) {
+				setValues();
+			}
+			
+			public void changedUpdate(DocumentEvent e) {
+				setValues();
+			}
+			
+			private void setValues(){
+				log.info("custom dnb : " +txtCustomDnb.getText());
+				dnbCanvas.setCustomDnb(txtCustomDnb.getText());
+			}
+		});
+		txtCustomDnb.setColumns(10);
+		
 		gl_pDNBVisual = new GroupLayout(pDNBVisual);
 		gl_pDNBVisual.setHorizontalGroup(
 			gl_pDNBVisual.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_pDNBVisual.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_pDNBVisual.createParallelGroup(Alignment.TRAILING)
-						.addGroup(Alignment.LEADING, gl_pDNBVisual.createSequentialGroup()
-							.addComponent(lbldnbperiod)
-							.addGap(18)
-							.addComponent(cmboxDNBPeriod, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(lblNodeShape)
-							.addGap(18)
-							.addComponent(cmbNodeShape, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_pDNBVisual.createParallelGroup(Alignment.LEADING)
+						.addComponent(dnbCanvas, GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)
 						.addGroup(gl_pDNBVisual.createSequentialGroup()
-							.addComponent(lblDnb)
-							.addGap(2)
-							.addComponent(btnDnbNodeColor)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(lblNotDnb)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnNotDnbNodeColor)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(lblDnbEdge)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnDnbEdgeColor)
-							.addGap(10)
-							.addComponent(lblNotDnbEdge)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnNotDnbEdgeColor)
-							.addGap(0, 0, Short.MAX_VALUE))
-						.addComponent(dnbCanvas, GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE))
+							.addGroup(gl_pDNBVisual.createParallelGroup(Alignment.TRAILING, false)
+								.addGroup(gl_pDNBVisual.createSequentialGroup()
+									.addComponent(lbldnbperiod)
+									.addGap(18)
+									.addComponent(cmboxDNBPeriod, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(lblNodeShape)
+									.addGap(18)
+									.addComponent(cmbNodeShape, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(lbldnb)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txtCustomDnb))
+								.addGroup(Alignment.LEADING, gl_pDNBVisual.createSequentialGroup()
+									.addComponent(lblDnb)
+									.addGap(2)
+									.addComponent(btnDnbNodeColor)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(lblNotDnb)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnNotDnbNodeColor)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(lblDnbEdge)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnDnbEdgeColor)
+									.addGap(10)
+									.addComponent(lblNotDnbEdge)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnNotDnbEdgeColor)))
+							.addGap(0, 69, Short.MAX_VALUE)))
 					.addGap(0))
 		);
 		gl_pDNBVisual.setVerticalGroup(
@@ -389,7 +428,9 @@ public class DNBGen extends JFrame {
 						.addComponent(lbldnbperiod)
 						.addComponent(cmboxDNBPeriod, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblNodeShape)
-						.addComponent(cmbNodeShape, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(cmbNodeShape, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lbldnb)
+						.addComponent(txtCustomDnb, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_pDNBVisual.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblDnb)

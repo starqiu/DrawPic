@@ -591,3 +591,141 @@ java.io.FileNotFoundException: \host\data\ci_maxima_index.txt (系统找不到�
 2015-04-24 15:03:43  [ AWT-EventQueue-0:125812 ] - [ INFO ]  node file path is D:\x\matrix_table_3_all_genes.txt
 2015-04-24 15:03:43  [ AWT-EventQueue-0:126677 ] - [ INFO ]  geneIds:[24267, 117541, 192269, 290876, 63996, 25128, 308631, 24249]
 2015-04-24 15:03:43  [ AWT-EventQueue-0:126677 ] - [ INFO ]  node file path is D:\x\matrix_table_1_all_genes.txt
+2015-04-24 16:03:25  [ AWT-EventQueue-0:0 ] - [ INFO ]  Constants.PROJECT_DIR=D:\DrawPic
+2015-04-24 16:03:25  [ AWT-EventQueue-0:437 ] - [ INFO ]  Tab index = 0
+2015-04-24 16:03:27  [ AWT-EventQueue-0:2029 ] - [ INFO ]  Tab index = 2
+2015-04-24 16:03:27  [ AWT-EventQueue-0:2029 ] - [ INFO ]  periods:[1, 3]
+2015-04-24 16:03:27  [ AWT-EventQueue-0:2045 ] - [ INFO ]  geneIds:[24267, 117541, 192269, 290876, 63996, 25128, 308631, 24249]
+2015-04-24 16:03:27  [ AWT-EventQueue-0:2045 ] - [ INFO ]  node file path is D:\x\matrix_table_1_all_genes.txt
+2015-04-24 16:03:27  [ AWT-EventQueue-0:2086 ] - [ INFO ]  Rscript D:\DrawPic\target\classes\core/cytoscape.R  -p D:\x\  --period.count   5  --period.sample.count  5 --cores 6
+2015-04-24 16:03:28  [ AWT-EventQueue-0:2975 ] - [ INFO ]  [1] "-p"                    "D:\\x\\"               "--period.count"       
+2015-04-24 16:03:28  [ AWT-EventQueue-0:2975 ] - [ INFO ]  [4] "5"                     "--period.sample.count" "5"                    
+2015-04-24 16:03:28  [ AWT-EventQueue-0:2975 ] - [ INFO ]  [7] "--cores"               "6"                    
+2015-04-24 16:03:28  [ AWT-EventQueue-0:2991 ] - [ INFO ]  [1] "working directory :  D:\\x\\"
+2015-04-24 16:03:29  [ AWT-EventQueue-0:4145 ] - [ INFO ]  �û� ϵͳ ���� 
+2015-04-24 16:03:29  [ AWT-EventQueue-0:4145 ] - [ INFO ]  0.86 0.27 1.17 
+2015-04-24 16:03:29  [ AWT-EventQueue-0:4178 ] - [ INFO ]  execute shell command successfully!
+2015-04-24 16:06:12  [ AWT-EventQueue-0:0 ] - [ INFO ]  Constants.PROJECT_DIR=D:\DrawPic
+2015-04-24 16:06:13  [ AWT-EventQueue-0:406 ] - [ INFO ]  Tab index = 0
+2015-04-24 16:06:14  [ AWT-EventQueue-0:1966 ] - [ INFO ]  Tab index = 2
+2015-04-24 16:06:14  [ AWT-EventQueue-0:1966 ] - [ INFO ]  periods:[1, 3]
+2015-04-24 16:06:14  [ AWT-EventQueue-0:1982 ] - [ INFO ]  geneIds:[24267, 117541, 192269, 290876, 63996, 25128, 308631, 24249]
+2015-04-24 16:06:14  [ AWT-EventQueue-0:1982 ] - [ INFO ]  node file path is D:\x\matrix_table_1_all_genes.txt
+2015-04-24 16:06:14  [ AWT-EventQueue-0:2020 ] - [ INFO ]  Rscript D:\DrawPic\target\classes\core/cytoscape.R  -p D:\x\  --period.count   5  --period.sample.count  5 --cores 6
+2015-04-24 16:06:15  [ AWT-EventQueue-0:2566 ] - [ INFO ]  [1] "-p"                    "D:\\x\\"               "--period.count"       
+2015-04-24 16:06:15  [ AWT-EventQueue-0:2566 ] - [ INFO ]  [4] "5"                     "--period.sample.count" "5"                    
+2015-04-24 16:06:15  [ AWT-EventQueue-0:2566 ] - [ INFO ]  [7] "--cores"               "6"                    
+2015-04-24 16:06:15  [ AWT-EventQueue-0:2566 ] - [ INFO ]  [1] "working directory :  D:\\x\\"
+2015-04-24 16:06:16  [ AWT-EventQueue-0:3720 ] - [ INFO ]  �û� ϵͳ ���� 
+2015-04-24 16:06:16  [ AWT-EventQueue-0:3720 ] - [ INFO ]  0.92 0.20 1.16 
+2015-04-24 16:06:16  [ AWT-EventQueue-0:3736 ] - [ INFO ]  execute shell command successfully!
+2015-04-24 16:42:29  [ AWT-EventQueue-0:0 ] - [ INFO ]  Constants.PROJECT_DIR=D:\DrawPic
+2015-04-24 16:42:30  [ AWT-EventQueue-0:453 ] - [ INFO ]  Tab index = 0
+2015-04-24 16:42:30  [ AWT-EventQueue-0:548 ] - [ INFO ]  custom dnb:
+2015-04-24 16:42:30  [ AWT-EventQueue-0:548 ] - [ INFO ]  new dnb:javax.swing.JPanel[,0,0,0x0,invalid,hidden,layout=javax.swing.GroupLayout,alignmentX=0.0,alignmentY=0.0,border=,flags=9,maximumSize=,minimumSize=,preferredSize=]
+2015-04-24 16:42:30  [ AWT-EventQueue-0:548 ] - [ INFO ]  old dnb:null
+2015-04-24 16:43:13  [ AWT-EventQueue-0:44028 ] - [ INFO ]  Tab index = 2
+2015-04-24 16:43:13  [ AWT-EventQueue-0:44044 ] - [ INFO ]  periods:[1, 3]
+2015-04-24 16:43:13  [ AWT-EventQueue-0:44044 ] - [ INFO ]  geneIds:[24267, 117541, 192269, 290876, 63996, 25128, 308631, 24249]
+2015-04-24 16:43:13  [ AWT-EventQueue-0:44044 ] - [ INFO ]  node file path is D:\x\matrix_table_1_all_genes.txt
+2015-04-24 16:43:13  [ AWT-EventQueue-0:44076 ] - [ INFO ]  Rscript D:\DrawPic\target\classes\core/cytoscape.R  -p D:\x\  --period.count   5  --period.sample.count  5 --cores 6
+2015-04-24 16:43:14  [ AWT-EventQueue-0:44731 ] - [ INFO ]  [1] "-p"                    "D:\\x\\"               "--period.count"       
+2015-04-24 16:43:14  [ AWT-EventQueue-0:44731 ] - [ INFO ]  [4] "5"                     "--period.sample.count" "5"                    
+2015-04-24 16:43:14  [ AWT-EventQueue-0:44731 ] - [ INFO ]  [7] "--cores"               "6"                    
+2015-04-24 16:43:14  [ AWT-EventQueue-0:44731 ] - [ INFO ]  [1] "working directory :  D:\\x\\"
+2015-04-24 16:43:15  [ AWT-EventQueue-0:45964 ] - [ INFO ]  �û� ϵͳ ���� 
+2015-04-24 16:43:15  [ AWT-EventQueue-0:45964 ] - [ INFO ]  0.88 0.30 1.23 
+2015-04-24 16:43:15  [ AWT-EventQueue-0:45979 ] - [ INFO ]  execute shell command successfully!
+2015-04-24 16:46:35  [ AWT-EventQueue-0:0 ] - [ INFO ]  Constants.PROJECT_DIR=D:\DrawPic
+2015-04-24 16:46:36  [ AWT-EventQueue-0:456 ] - [ INFO ]  Tab index = 0
+2015-04-24 16:46:36  [ AWT-EventQueue-0:565 ] - [ INFO ]  custom dnb:
+2015-04-24 16:46:36  [ AWT-EventQueue-0:565 ] - [ INFO ]  new dnb:javax.swing.JPanel[,0,0,0x0,invalid,hidden,layout=javax.swing.GroupLayout,alignmentX=0.0,alignmentY=0.0,border=,flags=9,maximumSize=,minimumSize=,preferredSize=]
+2015-04-24 16:46:36  [ AWT-EventQueue-0:565 ] - [ INFO ]  old dnb:null
+2015-04-24 16:46:56  [ AWT-EventQueue-0:20433 ] - [ INFO ]  Tab index = 2
+2015-04-24 16:46:56  [ AWT-EventQueue-0:20448 ] - [ INFO ]  periods:[1, 3]
+2015-04-24 16:46:56  [ AWT-EventQueue-0:20464 ] - [ INFO ]  geneIds:[24267, 117541, 192269, 290876, 63996, 25128, 308631, 24249]
+2015-04-24 16:46:56  [ AWT-EventQueue-0:20464 ] - [ INFO ]  node file path is D:\x\matrix_table_1_all_genes.txt
+2015-04-24 16:46:56  [ AWT-EventQueue-0:20486 ] - [ INFO ]  Rscript D:\DrawPic\target\classes\core/cytoscape.R  -p D:\x\  --period.count   5  --period.sample.count  5 --cores 6
+2015-04-24 16:46:56  [ AWT-EventQueue-0:21050 ] - [ INFO ]  [1] "-p"                    "D:\\x\\"               "--period.count"       
+2015-04-24 16:46:56  [ AWT-EventQueue-0:21050 ] - [ INFO ]  [4] "5"                     "--period.sample.count" "5"                    
+2015-04-24 16:46:56  [ AWT-EventQueue-0:21050 ] - [ INFO ]  [7] "--cores"               "6"                    
+2015-04-24 16:46:56  [ AWT-EventQueue-0:21050 ] - [ INFO ]  [1] "working directory :  D:\\x\\"
+2015-04-24 16:46:58  [ AWT-EventQueue-0:22298 ] - [ INFO ]  �û� ϵͳ ���� 
+2015-04-24 16:46:58  [ AWT-EventQueue-0:22298 ] - [ INFO ]  0.84 0.25 1.25 
+2015-04-24 16:46:58  [ AWT-EventQueue-0:22330 ] - [ INFO ]  execute shell command successfully!
+2015-04-24 16:48:40  [ AWT-EventQueue-0:0 ] - [ INFO ]  Constants.PROJECT_DIR=D:\DrawPic
+2015-04-24 16:48:41  [ AWT-EventQueue-0:439 ] - [ INFO ]  Tab index = 0
+2015-04-24 16:48:41  [ AWT-EventQueue-0:564 ] - [ INFO ]  custom dnb:
+2015-04-24 16:48:41  [ AWT-EventQueue-0:564 ] - [ INFO ]  new dnb:javax.swing.JPanel[,0,0,0x0,invalid,hidden,layout=javax.swing.GroupLayout,alignmentX=0.0,alignmentY=0.0,border=,flags=9,maximumSize=,minimumSize=,preferredSize=]
+2015-04-24 16:48:41  [ AWT-EventQueue-0:564 ] - [ INFO ]  old dnb:null
+2015-04-24 16:48:46  [ AWT-EventQueue-0:5552 ] - [ INFO ]  Tab index = 2
+2015-04-24 16:48:46  [ AWT-EventQueue-0:5568 ] - [ INFO ]  periods:[1, 3]
+2015-04-24 16:48:46  [ AWT-EventQueue-0:5568 ] - [ INFO ]  geneIds:[24267, 117541, 192269, 290876, 63996, 25128, 308631, 24249]
+2015-04-24 16:48:46  [ AWT-EventQueue-0:5568 ] - [ INFO ]  node file path is D:\x\matrix_table_1_all_genes.txt
+2015-04-24 16:48:46  [ AWT-EventQueue-0:5616 ] - [ INFO ]  Rscript D:\DrawPic\target\classes\core/cytoscape.R  -p D:\x\  --period.count   5  --period.sample.count  5 --cores 6
+2015-04-24 16:48:46  [ AWT-EventQueue-0:6182 ] - [ INFO ]  [1] "-p"                    "D:\\x\\"               "--period.count"       
+2015-04-24 16:48:46  [ AWT-EventQueue-0:6182 ] - [ INFO ]  [4] "5"                     "--period.sample.count" "5"                    
+2015-04-24 16:48:46  [ AWT-EventQueue-0:6182 ] - [ INFO ]  [7] "--cores"               "6"                    
+2015-04-24 16:48:46  [ AWT-EventQueue-0:6182 ] - [ INFO ]  [1] "working directory :  D:\\x\\"
+2015-04-24 16:48:48  [ AWT-EventQueue-0:7352 ] - [ INFO ]  �û� ϵͳ ���� 
+2015-04-24 16:48:48  [ AWT-EventQueue-0:7352 ] - [ INFO ]  0.87 0.26 1.17 
+2015-04-24 16:48:48  [ AWT-EventQueue-0:7368 ] - [ INFO ]  execute shell command successfully!
+2015-04-24 16:55:33  [ AWT-EventQueue-0:1 ] - [ INFO ]  Constants.PROJECT_DIR=D:\DrawPic
+2015-04-24 16:55:33  [ AWT-EventQueue-0:394 ] - [ INFO ]  Tab index = 0
+2015-04-24 16:55:34  [ AWT-EventQueue-0:1694 ] - [ INFO ]  Tab index = 2
+2015-04-24 16:55:34  [ AWT-EventQueue-0:1700 ] - [ INFO ]  periods:[1, 3]
+2015-04-24 16:55:34  [ AWT-EventQueue-0:1725 ] - [ INFO ]  geneIds:[24267, 117541, 192269, 290876, 63996, 25128, 308631, 24249]
+2015-04-24 16:55:34  [ AWT-EventQueue-0:1725 ] - [ INFO ]  node file path is D:\x\matrix_table_1_all_genes.txt
+2015-04-24 16:55:35  [ AWT-EventQueue-0:1757 ] - [ INFO ]  Rscript D:\DrawPic\target\classes\core/cytoscape.R  -p D:\x\  --period.count   5  --period.sample.count  5 --cores 6
+2015-04-24 16:55:35  [ AWT-EventQueue-0:2513 ] - [ INFO ]  [1] "-p"                    "D:\\x\\"               "--period.count"       
+2015-04-24 16:55:35  [ AWT-EventQueue-0:2515 ] - [ INFO ]  [4] "5"                     "--period.sample.count" "5"                    
+2015-04-24 16:55:35  [ AWT-EventQueue-0:2515 ] - [ INFO ]  [7] "--cores"               "6"                    
+2015-04-24 16:55:35  [ AWT-EventQueue-0:2515 ] - [ INFO ]  [1] "working directory :  D:\\x\\"
+2015-04-24 16:55:36  [ AWT-EventQueue-0:3667 ] - [ INFO ]  �û� ϵͳ ���� 
+2015-04-24 16:55:36  [ AWT-EventQueue-0:3667 ] - [ INFO ]  0.94 0.20 1.16 
+2015-04-24 16:55:36  [ AWT-EventQueue-0:3696 ] - [ INFO ]  execute shell command successfully!
+2015-04-24 16:55:40  [ AWT-EventQueue-0:7378 ] - [ INFO ]  changed : r
+2015-04-24 16:55:40  [ AWT-EventQueue-0:7513 ] - [ INFO ]  changed : ry
+2015-04-24 16:55:40  [ AWT-EventQueue-0:7671 ] - [ INFO ]  changed : rye
+2015-04-24 16:55:40  [ AWT-EventQueue-0:7707 ] - [ INFO ]  changed : ryer
+2015-04-24 16:55:41  [ AWT-EventQueue-0:8661 ] - [ INFO ]  changed : ryer,
+2015-04-24 16:55:42  [ AWT-EventQueue-0:9168 ] - [ INFO ]  changed : ryer,r
+2015-04-24 16:55:42  [ AWT-EventQueue-0:9312 ] - [ INFO ]  changed : ryer,re
+2015-04-24 16:55:42  [ AWT-EventQueue-0:9444 ] - [ INFO ]  changed : ryer,rey
+2015-04-24 16:55:42  [ AWT-EventQueue-0:9456 ] - [ INFO ]  changed : ryer,reyw
+2015-04-24 16:55:43  [ AWT-EventQueue-0:9990 ] - [ INFO ]  changed : ryer,reyw.
+2015-04-24 16:55:43  [ AWT-EventQueue-0:10164 ] - [ INFO ]  changed : ryer,reyw.k
+2015-04-24 16:55:48  [ AWT-EventQueue-0:15562 ] - [ INFO ]  changed : ryer,reyw.kh
+2015-04-24 16:55:49  [ AWT-EventQueue-0:15959 ] - [ INFO ]  changed : ryer,reyw.khj
+2015-04-24 16:55:50  [ AWT-EventQueue-0:16904 ] - [ INFO ]  changed : ryer,reyw.khjy
+2015-04-24 16:55:50  [ AWT-EventQueue-0:17101 ] - [ INFO ]  changed : ryer,reyw.khjyi
+2015-04-24 16:55:50  [ AWT-EventQueue-0:17439 ] - [ INFO ]  changed : ryer,reyw.khjyiy
+2015-04-24 16:55:51  [ AWT-EventQueue-0:18029 ] - [ INFO ]  changed : ryer,reyw.khjyiyu
+2015-04-24 16:55:51  [ AWT-EventQueue-0:18058 ] - [ INFO ]  changed : ryer,reyw.khjyiyui
+2015-04-24 16:55:51  [ AWT-EventQueue-0:18245 ] - [ INFO ]  changed : ryer,reyw.khjyiyuio
+2015-04-24 16:55:51  [ AWT-EventQueue-0:18530 ] - [ INFO ]  changed : ryer,reyw.khjyiyuioy
+2015-04-24 16:56:11  [ AWT-EventQueue-0:37809 ] - [ INFO ]  changed : 
+2015-04-24 16:56:11  [ AWT-EventQueue-0:37809 ] - [ INFO ]  changed : btnNotDnbEdgeColor.setBackground();
+2015-04-24 17:58:39  [ AWT-EventQueue-0:0 ] - [ INFO ]  Constants.PROJECT_DIR=D:\DrawPic
+2015-04-24 17:58:40  [ AWT-EventQueue-0:374 ] - [ INFO ]  Tab index = 0
+2015-04-24 17:58:42  [ AWT-EventQueue-0:2282 ] - [ INFO ]  Tab index = 2
+2015-04-24 17:58:42  [ AWT-EventQueue-0:2289 ] - [ INFO ]  periods:[1, 3]
+2015-04-24 17:58:42  [ AWT-EventQueue-0:2302 ] - [ INFO ]  geneIds:[24267, 117541, 192269, 290876, 63996, 25128, 308631, 24249]
+2015-04-24 17:58:42  [ AWT-EventQueue-0:2304 ] - [ INFO ]  node file path is D:\x\matrix_table_1_all_genes.txt
+2015-04-24 17:58:42  [ AWT-EventQueue-0:2344 ] - [ INFO ]  Rscript D:\DrawPic\target\classes\core/cytoscape.R  -p D:\x\  --period.count   5  --period.sample.count  5 --cores 6
+2015-04-24 17:58:42  [ AWT-EventQueue-0:2896 ] - [ INFO ]  [1] "-p"                    "D:\\x\\"               "--period.count"       
+2015-04-24 17:58:42  [ AWT-EventQueue-0:2899 ] - [ INFO ]  [4] "5"                     "--period.sample.count" "5"                    
+2015-04-24 17:58:42  [ AWT-EventQueue-0:2906 ] - [ INFO ]  [7] "--cores"               "6"                    
+2015-04-24 17:58:42  [ AWT-EventQueue-0:2907 ] - [ INFO ]  [1] "working directory :  D:\\x\\"
+2015-04-24 17:58:44  [ AWT-EventQueue-0:4304 ] - [ INFO ]  �û� ϵͳ ���� 
+2015-04-24 17:58:44  [ AWT-EventQueue-0:4304 ] - [ INFO ]  0.92 0.23 1.41 
+2015-04-24 17:58:44  [ AWT-EventQueue-0:4324 ] - [ INFO ]  execute shell command successfully!
+2015-04-24 17:58:48  [ AWT-EventQueue-0:8557 ] - [ INFO ]  custom dnb : 170913,29648,304667,306840
+2015-04-24 17:58:53  [ AWT-EventQueue-0:13874 ] - [ INFO ]  geneIds:[24267, 117541, 192269, 290876, 63996, 25128, 308631, 24249]
+2015-04-24 17:58:53  [ AWT-EventQueue-0:13875 ] - [ INFO ]  node file path is D:\x\matrix_table_1_all_genes.txt
+2015-04-24 17:58:54  [ AWT-EventQueue-0:14857 ] - [ INFO ]  geneIds:[289085, 29219, 680427, 500118, 307514, 25276, 310395, 24330, 54289, 79240, 54231, 315723, 364136, 25685]
+2015-04-24 17:58:54  [ AWT-EventQueue-0:14857 ] - [ INFO ]  node file path is D:\x\matrix_table_3_all_genes.txt
+2015-04-24 18:00:58  [ AWT-EventQueue-0:138360 ] - [ INFO ]  geneIds:[289085, 29219, 680427, 500118, 307514, 25276, 310395, 24330, 54289, 79240, 54231, 315723, 364136, 25685]
+2015-04-24 18:00:58  [ AWT-EventQueue-0:138360 ] - [ INFO ]  node file path is D:\x\matrix_table_3_all_genes.txt
+2015-04-24 18:00:59  [ AWT-EventQueue-0:139184 ] - [ INFO ]  geneIds:[24267, 117541, 192269, 290876, 63996, 25128, 308631, 24249]
+2015-04-24 18:00:59  [ AWT-EventQueue-0:139184 ] - [ INFO ]  node file path is D:\x\matrix_table_1_all_genes.txt

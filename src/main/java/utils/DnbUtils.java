@@ -57,15 +57,24 @@ public final class DnbUtils {
 	 * @param random Random类实例,用于随机生成点的坐标
 	 * @param maxWidth 点横坐标的最大值
 	 * @param maxHeight 点纵坐标的最大值
+	 * @param customDnb 自定义的DNB，以,为分隔符
 	 * @return key为点的ID,value为对应的点
 	 */
 	public static Map<String, Node> getAllNodesByPeriod(
 			String workspace, String period, Random random, int maxWidth,
-			int maxHeight,Map<String, Node> nodesMap) {
+			int maxHeight,Map<String, Node> nodesMap,String customDnb) {
 		if ((null == nodesMap) || !TempVar.HAS_GENERATED_GDM_CSV) {
 			nodesMap = new HashMap<String, Node>();
 			 HashMap<String, String> dnbMap = getDnbMapByPeriod(workspace,period);
 
+			 HashMap<String, String> custDnbMap = new HashMap<String, String>();
+			 if (null != customDnb && "" !=customDnb) {
+				 String[] custDnbs = customDnb.split(",");
+				 for (String custDnb : custDnbs) {
+					custDnbMap.put(custDnb, "1");
+				}
+			}
+			 
 			 int notDNBMaxWidth = (int) (maxWidth * 0.8);
 			 int dnbMinWidth = notDNBMaxWidth + Constants.CANVAS_MODULE_MARGIN;
 			 int dnbMinHeight = (maxHeight + Constants.CANVAS_MODULE_MARGIN)>>1 ;
@@ -84,14 +93,18 @@ public final class DnbUtils {
 					Node node = new Node();
 					node.setId(idBr.readLine());
 
-					if (null == dnbMap.get(node.getId())) {
-						node.setNodeType(NodeType.NOT_DNB);
-						node.setX(random.nextInt(notDNBMaxWidth));
-						node.setY(random.nextInt(maxHeight));
-					}else {
+					if (null != dnbMap.get(node.getId())) {
 						node.setNodeType(NodeType.DNB);
 						node.setX(random.nextInt(dnbWidth) + dnbMinWidth);
 						node.setY(random.nextInt(dnbHeight) + dnbMinHeight);
+					}else if (null != custDnbMap.get(node.getId())) {
+						node.setNodeType(NodeType.CUSTOM_DNB);
+						node.setX(random.nextInt(dnbWidth) + dnbMinWidth);
+						node.setY(random.nextInt(dnbMinHeight));
+					}else{
+						node.setNodeType(NodeType.NOT_DNB);
+						node.setX(random.nextInt(notDNBMaxWidth));
+						node.setY(random.nextInt(maxHeight));
 					}
 					
 					nodesMap.put(node.getId(), node);
@@ -293,6 +306,10 @@ public final class DnbUtils {
 		}
 		log.info("get ci value  successfully !");
 		return ci;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println("".split(",").length);
 	}
 
 }
