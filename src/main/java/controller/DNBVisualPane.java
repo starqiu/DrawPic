@@ -12,10 +12,12 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import model.Edge;
 import model.Node;
+import model.NodeShape;
 import model.NodeType;
 
 import org.apache.log4j.Logger;
@@ -38,17 +40,17 @@ import utils.TempVar;
 
 /**
  * 实现功能：DNB 可视化,样式如下:<br/>
- * _________________________________________________________________<br />
- * |                                                             |  |                                     |<br />
- * |                                                             |  |       custom               |<br />
- * |                                                             |  |         DNB                   |<br />
+ * __________________________________________________________________________________________<br />
+ * |                                                             |  |                       |<br />
+ * |                                                             |  |       custom          |<br />
+ * |                                                             |  |         DNB           |<br />
  * |                                                             |  |______________________ |<br />
- * |         not DNB                                   |  |______________________ |<br />
- * |                                                             |  |                                     |<br />
- * |                                                             |  |      Gen DNB             |<br />
- * |                                                             |  |                                     |<br />
- * |                                                             |  |                                     |<br />
- * |____________________________________ |_ |______________________|<br />
+ * |         not DNB                                             |  |______________________ |<br />
+ * |                                                             |  |                       |<br />
+ * |                                                             |  |      Gen DNB          |<br />
+ * |                                                             |  |                       |<br />
+ * |                                                             |  |                       |<br />
+ * |_____________________________________________________________|__|_______________________|<br />
  * <p>
  * date author email notes<br />
  * -------- --------------------------- ---------------<br />
@@ -66,6 +68,12 @@ public class DNBVisualPane extends JPanel {
 	private BufferedImage paintImage = new BufferedImage(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHTH, BufferedImage.TYPE_INT_RGB);
 	private Map<String, Node> nodesMap = null;
 	private String period = null;
+	private Color dnbNodeColor;
+	private Color notDnbNodeColor;
+	private Color dnbEdgeColor;
+	private Color notDnbEdgeColor;
+	/** 默认顶点形状为圆形*/
+	private NodeShape nodeShape = NodeShape.CIRCLE;
 
 	public DNBVisualPane() {
 		super(); 
@@ -99,24 +107,25 @@ public class DNBVisualPane extends JPanel {
 				period, nodesMap);
 
 		int radiusOfNode = 5;//点的半径
-		for (Node node : nodesMap.values()) {
-			switch (node.getNodeType()) {
-			case NOT_DNB:
-				g.fillOval(node.getX(), node.getY(), radiusOfNode, radiusOfNode);
-				break;
-			case DNB:
-				g.setColor(Color.RED);
-				g.fillOval(node.getX(), node.getY(), radiusOfNode*4, radiusOfNode*4);
-				g.setColor(Color.BLACK);
-				break;
+		switch (nodeShape) {
+		case CIRCLE:
+			drawCircleNode(g, radiusOfNode);
+			break;
 
-			default:
-				break;
-			}
-//			g.fillOval(node.getX(), node.getY(), radiusOfNode, radiusOfNode);
-//			g.drawLine(node.getX(), node.getY(), node.getX(), node.getY());
+		default:
+			drawRectangleNode(g, radiusOfNode);
+			break;
 		}
-		
+
+		drawEdges(g, relatedNodeMap);
+
+	}
+	/**
+	 * 绘制所有的边
+	 * @param g
+	 * @param relatedNodeMap
+	 */
+	private void drawEdges(Graphics g, Map<String, List<String>> relatedNodeMap) {
 		for (Entry<String, List<String>> nodeEntry : relatedNodeMap.entrySet()) {
 			Node sourceNode = nodesMap.get(nodeEntry.getKey());
 			Node targetNode = null;
@@ -124,19 +133,60 @@ public class DNBVisualPane extends JPanel {
 				targetNode = nodesMap.get(targetNodeId);
 				if (sourceNode.getNodeType() == NodeType.NOT_DNB  &&
 					targetNode.getNodeType() == NodeType.NOT_DNB ) {
+					g.setColor(getNotDnbEdgeColor());
 					g.drawLine(sourceNode.getX(), sourceNode.getY(), targetNode.getX(), targetNode.getY());
 				}else {
-					g.setColor(Color.YELLOW);
+					g.setColor(getDnbEdgeColor());
 					g.drawLine(sourceNode.getX(), sourceNode.getY(), targetNode.getX(), targetNode.getY());
-					g.setColor(Color.BLACK);
 				}
 			}
 		}
+	}
+	
+	/**
+	 * 绘制所有的顶点，其中顶点形状为圆形
+	 * @param g
+	 * @param radiusOfNode
+	 */
+	private void drawCircleNode(Graphics g, int radiusOfNode) {
+		for (Node node : nodesMap.values()) {
+			switch (node.getNodeType()) {
+			case NOT_DNB:
+				g.setColor(getNotDnbNodeColor());
+				g.fillOval(node.getX(), node.getY(), radiusOfNode, radiusOfNode);
+				break;
+			case DNB:
+				g.setColor(getDnbNodeColor());
+				g.fillOval(node.getX(), node.getY(), radiusOfNode*4, radiusOfNode*4);
+				break;
 
-//		for (Edge edge : edges) {
-//			g.drawLine(edge.getSource().getX(), edge.getSource().getY(), edge
-//					.getTarget().getX(), edge.getTarget().getY());
-//		}
+			default:
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * 绘制所有的顶点，其中顶点形状为方形
+	 * @param g
+	 * @param radiusOfNode
+	 */
+	private void drawRectangleNode(Graphics g, int radiusOfNode) {
+		for (Node node : nodesMap.values()) {
+			switch (node.getNodeType()) {
+			case NOT_DNB:
+				g.setColor(getNotDnbNodeColor());
+				g.fillRect(node.getX(), node.getY(), radiusOfNode, radiusOfNode);
+				break;
+			case DNB:
+				g.setColor(getDnbNodeColor());
+				g.fillRect(node.getX(), node.getY(), radiusOfNode*4, radiusOfNode*4);
+				break;
+				
+			default:
+				break;
+			}
+		}
 	}
 	
 	// draw painting
@@ -191,5 +241,35 @@ public class DNBVisualPane extends JPanel {
 
 	public void setNodesMap(Map<String, Node> nodesMap) {
 		this.nodesMap = nodesMap;
+	}
+	public Color getDnbNodeColor() {
+		return dnbNodeColor;
+	}
+	public void setDnbNodeColor(Color dnbNodeColor) {
+		this.dnbNodeColor = dnbNodeColor;
+	}
+	public Color getNotDnbNodeColor() {
+		return notDnbNodeColor;
+	}
+	public void setNotDnbNodeColor(Color notDnbNodeColor) {
+		this.notDnbNodeColor = notDnbNodeColor;
+	}
+	public Color getDnbEdgeColor() {
+		return dnbEdgeColor;
+	}
+	public void setDnbEdgeColor(Color dnbEdgeColor) {
+		this.dnbEdgeColor = dnbEdgeColor;
+	}
+	public Color getNotDnbEdgeColor() {
+		return notDnbEdgeColor;
+	}
+	public void setNotDnbEdgeColor(Color notDnbEdgeColor) {
+		this.notDnbEdgeColor = notDnbEdgeColor;
+	}
+	public NodeShape getNodeShape() {
+		return nodeShape;
+	}
+	public void setNodeShape(NodeShape nodeShape) {
+		this.nodeShape = nodeShape;
 	}
 }
