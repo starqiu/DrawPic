@@ -8,8 +8,8 @@ library(plyr)
 
 BASE.PATH <- "~/data/"
 # BASE.PATH <- "./"
-CASE.FILE.PATH <- "~/data//sourceData/liver_case_data.txt"
-CONTROL.FILE.PATH <- "~/data//sourceData/liver_control_data.txt"
+CASE.FILE.PATH <- "~/data/sourceData/liver_case_data.txt"
+CONTROL.FILE.PATH <- "~/data/sourceData/liver_control_data.txt"
 # CASE.FILE.PATH <- NULL
 # CONTROL.FILE.PATH <- NULL
 
@@ -119,12 +119,12 @@ sd.test <- function(file.name,features.sd.threshold=0.001){
   
   gene.sd <- case.sd[no.zero.index]/control.sd[no.zero.index]
   gene.sd.log <- log(gene.sd)
-  gene.sd.log.p <- unlist(lapply(gene.sd.log,pnorm,mean=mean(gene.sd.log),sd=sd(gene.sd.log)))
-  high.sd.index <- which((gene.sd.log.p <= features.sd.threshold) | (gene.sd.log.p >= (1-features.sd.threshold))) 
-  source.high.sd.index <- no.zero.index[high.sd.index]
+#   gene.sd.log.p <- unlist(lapply(gene.sd.log,pnorm,mean=mean(gene.sd.log),sd=sd(gene.sd.log)))
+#   high.sd.index <- which((gene.sd.log.p <= features.sd.threshold) | (gene.sd.log.p >= (1-features.sd.threshold))) 
   #li's method
-  #   sd.log.threshold <- pnorm(features.sd.threshold/2,mean=mean(gene.sd.log),sd=sd(gene.sd.log))
-  #   high.sd.index <- which(abs(gene.sd.log) >= sd.log.threshold)
+    sd.log.threshold <- pnorm(features.sd.threshold/2,mean=mean(gene.sd.log),sd=sd(gene.sd.log))
+    high.sd.index <- which(abs(gene.sd.log) >= sd.log.threshold)
+  source.high.sd.index <- no.zero.index[high.sd.index]
   
   #  all genes 
   write.table(case.period.matrix.table[,1],
