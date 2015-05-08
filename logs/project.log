@@ -1,0 +1,52 @@
+2015-05-06 10:22:34  [ AWT-EventQueue-0:0 ] - [ INFO ]  Constants.PROJECT_DIR=D:\DrawPic
+2015-05-06 10:22:35  [ AWT-EventQueue-0:515 ] - [ INFO ]  Tab index = 0
+2015-05-06 10:23:12  [ AWT-EventQueue-0:37498 ] - [ INFO ]  gdmCmd:Rscript D:\DrawPic\target\classes\core\gdm4Par.R  -p D:\x\  --case.file.path  D:\data\sourceData\liver_case_data.txt  --period.count   5  --period.sample.count  5 --features.sd.threshold  0.001 --cluster.hclust.h  0.75 --pcc.out.amount  50 --cores 6  --control.file.path  D:\data\sourceData\liver_control_data.txt
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]   [1] "-p"                                          
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]   [2] "D:\\x\\"                                     
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]   [3] "--case.file.path"                            
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]   [4] "D:\\data\\sourceData\\liver_case_data.txt"   
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]   [5] "--period.count"                              
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]   [6] "5"                                           
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]   [7] "--period.sample.count"                       
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]   [8] "5"                                           
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]   [9] "--features.sd.threshold"                     
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]  [10] "0.001"                                       
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]  [11] "--cluster.hclust.h"                          
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]  [12] "0.75"                                        
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]  [13] "--pcc.out.amount"                            
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]  [14] "50"                                          
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]  [15] "--cores"                                     
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]  [16] "6"                                           
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]  [17] "--control.file.path"                         
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]  [18] "D:\\data\\sourceData\\liver_control_data.txt"
+2015-05-06 10:23:13  [ AWT-EventQueue-0:38310 ] - [ INFO ]  [1] "working directory :  D:\\x\\"
+2015-05-06 10:23:23  [ AWT-EventQueue-0:49238 ] - [ INFO ]  [1] "ci table:"
+2015-05-06 10:23:23  [ AWT-EventQueue-0:49238 ] - [ INFO ]          1         2         3         4         5 
+2015-05-06 10:23:23  [ AWT-EventQueue-0:49238 ] - [ INFO ]  31.378107 24.492304 26.040971 15.216826  3.965596 
+2015-05-06 10:23:24  [ AWT-EventQueue-0:49253 ] - [ INFO ]  [1] "ci maxima index:"
+2015-05-06 10:23:24  [ AWT-EventQueue-0:49253 ] - [ INFO ]  1 3 
+2015-05-06 10:23:24  [ AWT-EventQueue-0:49253 ] - [ INFO ]  1 3 
+2015-05-06 10:23:24  [ AWT-EventQueue-0:49270 ] - [ INFO ]   �û�  ϵͳ  ���� 
+2015-05-06 10:23:24  [ AWT-EventQueue-0:49270 ] - [ INFO ]  10.25  0.16 10.97 
+2015-05-06 10:23:24  [ AWT-EventQueue-0:49286 ] - [ INFO ]  execute shell command successfully!
+2015-05-06 10:23:49  [ AWT-EventQueue-0:75067 ] - [ INFO ]  Tab index = 1
+2015-05-06 10:23:51  [ AWT-EventQueue-0:76597 ] - [ INFO ]  Tab index = 2
+2015-05-06 10:23:51  [ AWT-EventQueue-0:76676 ] - [ INFO ]  periods:[1, 3]
+2015-05-06 10:23:51  [ AWT-EventQueue-0:76676 ] - [ INFO ]  geneIds:[24267, 117541, 192269, 290876, 63996, 25128, 308631, 24249]
+2015-05-06 10:23:51  [ AWT-EventQueue-0:76676 ] - [ INFO ]  node file path is D:\x\matrix_table_1_all_genes.txt
+2015-05-06 10:23:51  [ AWT-EventQueue-0:76801 ] - [ INFO ]  Rscript D:\DrawPic\target\classes\core/cytoscape.R  -p D:\x\  --period.count   5  --period.sample.count  5 --cores 6
+2015-05-06 10:23:52  [ AWT-EventQueue-0:77706 ] - [ INFO ]  [1] "-p"                    "D:\\x\\"               "--period.count"       
+2015-05-06 10:23:52  [ AWT-EventQueue-0:77706 ] - [ INFO ]  [4] "5"                     "--period.sample.count" "5"                    
+2015-05-06 10:23:52  [ AWT-EventQueue-0:77706 ] - [ INFO ]  [7] "--cores"               "6"                    
+2015-05-06 10:23:52  [ AWT-EventQueue-0:77706 ] - [ INFO ]  [1] "working directory :  D:\\x\\"
+2015-05-06 10:23:53  [ AWT-EventQueue-0:78932 ] - [ INFO ]  �û� ϵͳ ���� 
+2015-05-06 10:23:53  [ AWT-EventQueue-0:78932 ] - [ INFO ]  0.94 0.15 1.22 
+2015-05-06 10:23:53  [ AWT-EventQueue-0:78947 ] - [ INFO ]  execute shell command successfully!
+2015-05-06 10:24:00  [ AWT-EventQueue-0:85723 ] - [ INFO ]  geneIds:[24267, 117541, 192269, 290876, 63996, 25128, 308631, 24249]
+2015-05-06 10:24:00  [ AWT-EventQueue-0:85723 ] - [ INFO ]  node file path is D:\x\matrix_table_1_all_genes.txt
+2015-05-06 10:24:01  [ AWT-EventQueue-0:86597 ] - [ INFO ]  geneIds:[289085, 29219, 680427, 500118, 307514, 25276, 310395, 24330, 54289, 79240, 54231, 315723, 364136, 25685]
+2015-05-06 10:24:01  [ AWT-EventQueue-0:86597 ] - [ INFO ]  node file path is D:\x\matrix_table_3_all_genes.txt
+2015-05-06 10:24:11  [ AWT-EventQueue-0:96737 ] - [ INFO ]  geneIds:[289085, 29219, 680427, 500118, 307514, 25276, 310395, 24330, 54289, 79240, 54231, 315723, 364136, 25685]
+2015-05-06 10:24:11  [ AWT-EventQueue-0:96737 ] - [ INFO ]  node file path is D:\x\matrix_table_3_all_genes.txt
+2015-05-06 10:24:12  [ AWT-EventQueue-0:97613 ] - [ INFO ]  geneIds:[24267, 117541, 192269, 290876, 63996, 25128, 308631, 24249]
+2015-05-06 10:24:12  [ AWT-EventQueue-0:97613 ] - [ INFO ]  node file path is D:\x\matrix_table_1_all_genes.txt

@@ -23,7 +23,8 @@ public class TempVar {
 	public static String PERIOD_SAMPLE_COUNT="5";
 	public static String PERIOD_COUNT="5";
 	public static String CORES="6";
-	public static String WORK_SPACE="/host/data/";
+//	public static String WORK_SPACE="/host/data/";
+	public static String WORK_SPACE="D:\\x\\";
 	public static boolean HAS_GENERATED_GDM_CSV=false;
 }
 

@@ -5,15 +5,13 @@
 #' 
 #' 
 library(plyr)
-library(foreach)
-library(doParallel)
 
-BASE.PATH <- "/host/data/"
+BASE.PATH <- "~/data/"
 # BASE.PATH <- "./"
-# CASE.FILE.PATH <- "/host/data//sourceData/liver_case_data.txt"
-# CONTROL.FILE.PATH <- "/host/data//sourceData/liver_control_data.txt"
-CASE.FILE.PATH <- NULL
-CONTROL.FILE.PATH <- NULL
+CASE.FILE.PATH <- "~/data//sourceData/liver_case_data.txt"
+CONTROL.FILE.PATH <- "~/data//sourceData/liver_control_data.txt"
+# CASE.FILE.PATH <- NULL
+# CONTROL.FILE.PATH <- NULL
 
 
 # FILE.NAME <- "GSE64538_labeled.txt"
@@ -95,10 +93,10 @@ divide.files.by.periods <- function(state,file.path){
   period.name <- ""
   z <- c((1-PERIOD.SAMPLE.COUNT):1)  
   
-  foreach(i = 1:PERIOD.COUNT) %dopar% {
-    z <- z+PERIOD.SAMPLE.COUNT*i
+  for(i in 1:PERIOD.COUNT)  {
+    z <- z+PERIOD.SAMPLE.COUNT
     z[1]<-1 #row name
-    
+    #     print(z)
     period.name <- paste(state,"_matrix_table_",i,".txt",sep="")
     # the matrix in each state in every period
     write.table(matrix.table[z],file=period.name,
@@ -270,8 +268,7 @@ pcc.test <- function(period){
   colnames(df.with.cluster.genes.sds) <-c("cluster","genes.index","case.sd","control.sd")
   df.aggr.by.cluster <- ddply(df.with.cluster.genes.sds,.(cluster),summarize,
                               models = paste(genes.index,collapse=","),
-                              sd = mean(case.sd)/mean(control.sd),
-                              .parallel=TRUE)
+                              sd = mean(case.sd)/mean(control.sd))
   colnames(df.aggr.by.cluster) <-c("cluster","models","sd")
   
   cluster.aggr <- df.aggr.by.cluster$cluster
@@ -449,19 +446,19 @@ gdm <- function(){
     }
   }
   
-  registerDoParallel(cores=CORES)  
+  #   registerDoParallel(cores=CORES)  
   divide.files.by.periods(STATE[1],CASE.FILE.PATH)
   
   if(STATE.COUNT == 2){
     divide.files.by.periods(STATE[2],CONTROL.FILE.PATH)
     
-    foreach (period = 1:PERIOD.COUNT) %dopar% {
+    for (period in 1:PERIOD.COUNT) {
       file.name <- paste("matrix_table_",period,sep="")
       sd.test(file.name=file.name,features.sd.threshold=FEATURES.SD.THRESHOLD)
       pcc.test(period)
     }
   }else{# one state
-    foreach (period = 1:PERIOD.COUNT) %dopar% {
+    for (period in 1:PERIOD.COUNT) {
       file.name <- paste("matrix_table_",period,sep="")
       sd.test.with.one.state(file.name=file.name,features.sd.threshold=FEATURES.SD.THRESHOLD)
       pcc.test.with.one.state(period)
@@ -471,7 +468,7 @@ gdm <- function(){
 }
 
 main <- function(){
-
+  
   args <- commandArgs(TRUE)
   print(args)
   if ((length(args) %% 2 != 0) ){

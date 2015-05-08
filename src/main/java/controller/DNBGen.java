@@ -17,7 +17,9 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -34,6 +36,11 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import model.NodeShape;
+import model.NodeType;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -42,6 +49,11 @@ import utils.CommonUtils;
 import utils.Constants;
 import utils.DnbUtils;
 import utils.TempVar;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
 
 /*
  * ============================================================
@@ -67,7 +79,7 @@ public class DNBGen extends JFrame {
 	
 	/** */
 	private static final long serialVersionUID = 496091640493909358L;
-	private  final  String classPath = this.getClass().getResource("/").getPath();
+	private  final  String classPath = new File(this.getClass().getResource("/").getPath()).getAbsolutePath()+File.separator;
 	private static final Logger log = Logger.getLogger(DNBGen.class);
 	private JPanel contentPane;
 	private JTextField txtWorkSpace;
@@ -85,7 +97,28 @@ public class DNBGen extends JFrame {
 	private DNBVisualPane dnbCanvas;
 	private GroupLayout gl_pDNBVisual = null;
 	private JTabbedPane tabbedPane= null;
-	private JComboBox<String> cmboxDNBPeriod = null;
+	private JComboBox<String> cmboxDNBPeriod;
+	private JLabel lbldnbperiod;
+	private JComboBox<NodeShape> cmbNodeShape;
+	private JLabel lblWorkSpace;
+	private JLabel lblCase;
+	private JLabel lblControl;
+	private JButton btnCase;
+	private JButton btnWorkSpace;
+	private JButton btnControl;
+	private JLabel lblSdThreshold;
+	private JLabel lblPeriod;
+	private JLabel lblClusterH;
+	private JLabel lblPeriodSampleCount;
+	private JButton btnDnbgen;
+	private JLabel lblPccOutAmount;
+	private JLabel lblCores;
+	private JButton btnDnbNodeColor;
+	private JButton btnNotDnbNodeColor;
+	private JButton btnDnbEdgeColor;
+	private JButton btnNotDnbEdgeColor;
+	private JLabel lbldnb;
+	private JTextField txtCustomDnb;
 
 	/**
 	 * Launch the application.
@@ -111,7 +144,7 @@ public class DNBGen extends JFrame {
 	 */
 	public DNBGen() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 629, 721);
+		setBounds(100, 100, 772, 751);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -143,7 +176,7 @@ public class DNBGen extends JFrame {
 		});
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		
-		addExeMod();
+//		addExeMod();
 		
 		dnbGenTab(tabbedPane);
 		
@@ -180,7 +213,7 @@ public class DNBGen extends JFrame {
 		pDNBVisual = new JPanel();
 		tabbedPane.addTab("DNB可视化", null, pDNBVisual, null);
 		
-		JLabel lbldnbperiod = new JLabel("请选择DNB的时期(Period):");
+		lbldnbperiod = new JLabel("请选择DNB的时期(Period):");
 		cmboxDNBPeriod = new JComboBox<String>();
 		dnbCanvas = new DNBVisualPane();
 		dnbCanvasSaveAs();
@@ -253,19 +286,139 @@ public class DNBGen extends JFrame {
 	 */
 	private void dnbVisualTabLayout(JLabel lbldnbperiod,
 			JComboBox<String> cmboxDNBPeriod) {
+		
+		JLabel lblNodeShape = new JLabel("顶点形状：");
+		
+		cmbNodeShape = new JComboBox<NodeShape>();
+		cmbNodeShape.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				dnbCanvas.setNodeShape((NodeShape)e.getItem());
+			}
+		});
+		cmbNodeShape.setModel(new DefaultComboBoxModel<NodeShape>(
+				NodeShape.values()));
+		
+		JLabel lblDnb = new JLabel("DNB顶点的颜色：");
+		btnDnbNodeColor = new JButton(" ");
+		btnDnbNodeColor.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Color selectedColor = JColorChooser.showDialog(btnDnbNodeColor, "请选择颜色",
+														btnDnbNodeColor.getBackground());
+				btnDnbNodeColor.setBackground(selectedColor);
+				dnbCanvas.setDnbNodeColor(selectedColor);
+			}
+		});
+		
+		JLabel lblNotDnb = new JLabel("非DNB顶点的颜色：");
+		btnNotDnbNodeColor = new JButton(" ");
+		btnNotDnbNodeColor.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Color selectedColor = JColorChooser.showDialog(btnDnbNodeColor, "请选择颜色",
+						btnNotDnbNodeColor.getBackground());
+				btnNotDnbNodeColor.setBackground(selectedColor);
+				dnbCanvas.setNotDnbNodeColor(selectedColor);
+			}
+		});
+		
+		JLabel lblDnbEdge = new JLabel("与DNB关联的边的颜色：");
+		btnDnbEdgeColor = new JButton(" ");
+		btnDnbEdgeColor.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Color selectedColor = JColorChooser.showDialog(btnDnbNodeColor, "请选择颜色",
+						btnDnbEdgeColor.getBackground());
+				btnDnbEdgeColor.setBackground(selectedColor);
+				dnbCanvas.setDnbEdgeColor(selectedColor);
+			}
+		});
+		
+		JLabel lblNotDnbEdge = new JLabel("未与DNB关联的边的颜色：");
+		btnNotDnbEdgeColor = new JButton(" ");
+		btnNotDnbEdgeColor.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Color selectedColor = JColorChooser.showDialog(btnDnbNodeColor, "请选择颜色",
+						btnNotDnbEdgeColor.getBackground());
+				btnNotDnbEdgeColor.setBackground(selectedColor);
+				dnbCanvas.setNotDnbEdgeColor(selectedColor);
+			}
+		});
+		
+		btnDnbNodeColor.setBackground(Color.RED);
+		btnNotDnbNodeColor.setBackground(Color.BLACK);
+		btnDnbEdgeColor.setBackground(Color.YELLOW);
+		btnNotDnbEdgeColor.setBackground(Color.BLACK);
+		
+		dnbCanvas.setDnbNodeColor(btnDnbNodeColor.getBackground());
+		dnbCanvas.setNotDnbNodeColor(btnNotDnbNodeColor.getBackground());
+		dnbCanvas.setDnbEdgeColor(btnDnbEdgeColor.getBackground());
+		dnbCanvas.setNotDnbEdgeColor(btnNotDnbEdgeColor.getBackground());
+		
+		lbldnb = new JLabel("自定义DNB（以,分割）：");
+		
+		txtCustomDnb = new JTextField();
+		txtCustomDnb.getDocument().addDocumentListener(new DocumentListener() {
+			
+			public void removeUpdate(DocumentEvent e) {
+				setValues();
+			}
+			
+			public void insertUpdate(DocumentEvent e) {
+				setValues();
+			}
+			
+			public void changedUpdate(DocumentEvent e) {
+				setValues();
+			}
+			
+			private void setValues(){
+				log.info("custom dnb : " +txtCustomDnb.getText());
+				dnbCanvas.setCustomDnb(txtCustomDnb.getText());
+			}
+		});
+		txtCustomDnb.setColumns(10);
+		
 		gl_pDNBVisual = new GroupLayout(pDNBVisual);
 		gl_pDNBVisual.setHorizontalGroup(
 			gl_pDNBVisual.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_pDNBVisual.createSequentialGroup()
-					.addGap(20)
-					.addComponent(lbldnbperiod)
-					.addGap(26)
-					.addComponent(cmboxDNBPeriod, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(376))
-				.addGroup(gl_pDNBVisual.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(dnbCanvas, GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
-					.addContainerGap())
+					.addGroup(gl_pDNBVisual.createParallelGroup(Alignment.LEADING)
+						.addComponent(dnbCanvas, GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)
+						.addGroup(gl_pDNBVisual.createSequentialGroup()
+							.addGroup(gl_pDNBVisual.createParallelGroup(Alignment.TRAILING, false)
+								.addGroup(gl_pDNBVisual.createSequentialGroup()
+									.addComponent(lbldnbperiod)
+									.addGap(18)
+									.addComponent(cmboxDNBPeriod, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(lblNodeShape)
+									.addGap(18)
+									.addComponent(cmbNodeShape, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(lbldnb)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txtCustomDnb))
+								.addGroup(Alignment.LEADING, gl_pDNBVisual.createSequentialGroup()
+									.addComponent(lblDnb)
+									.addGap(2)
+									.addComponent(btnDnbNodeColor)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(lblNotDnb)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnNotDnbNodeColor)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(lblDnbEdge)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnDnbEdgeColor)
+									.addGap(10)
+									.addComponent(lblNotDnbEdge)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnNotDnbEdgeColor)))
+							.addGap(0, 69, Short.MAX_VALUE)))
+					.addGap(0))
 		);
 		gl_pDNBVisual.setVerticalGroup(
 			gl_pDNBVisual.createParallelGroup(Alignment.LEADING)
@@ -273,9 +426,23 @@ public class DNBGen extends JFrame {
 					.addGap(5)
 					.addGroup(gl_pDNBVisual.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lbldnbperiod)
-						.addComponent(cmboxDNBPeriod, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addComponent(dnbCanvas, GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+						.addComponent(cmboxDNBPeriod, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNodeShape)
+						.addComponent(cmbNodeShape, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lbldnb)
+						.addComponent(txtCustomDnb, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_pDNBVisual.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblDnb)
+						.addComponent(btnDnbNodeColor)
+						.addComponent(lblNotDnb)
+						.addComponent(btnNotDnbNodeColor)
+						.addComponent(lblDnbEdge)
+						.addComponent(btnDnbEdgeColor)
+						.addComponent(lblNotDnbEdge)
+						.addComponent(btnNotDnbEdgeColor))
+					.addGap(24)
+					.addComponent(dnbCanvas, GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		pDNBVisual.setLayout(gl_pDNBVisual);
@@ -321,12 +488,12 @@ public class DNBGen extends JFrame {
 		JPanel pDNBGen = new JPanel();
 		tabbedPane.addTab("参数输入", null, pDNBGen, null);
 		
-		JLabel lblWorkSpace = new JLabel("工作目录:");
+		lblWorkSpace = new JLabel("工作目录:");
 		
 		txtWorkSpace = new JTextField();
 		txtWorkSpace.setColumns(10);
 		
-		final JButton btnWorkSpace = new JButton("选择");
+		btnWorkSpace = new JButton("选择");
 		btnWorkSpace.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -341,7 +508,7 @@ public class DNBGen extends JFrame {
 		
 		
 		
-		final JButton btnCase = new JButton("选择");
+		btnCase = new JButton("选择");
 		btnCase.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -352,7 +519,7 @@ public class DNBGen extends JFrame {
 			}
 		});
 		
-		final JButton btnControl = new JButton("选择");
+		btnControl = new JButton("选择");
 		btnControl.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -363,14 +530,14 @@ public class DNBGen extends JFrame {
 			}
 		});
 		
-		JLabel lblCase = new JLabel("Case文件:");
-		JLabel lblControl = new JLabel("Control文件:");
-		JLabel lblPeriod= new JLabel("总时期数(Period): ");
-		JLabel lblPeriodSampleCount= new JLabel("每个时期样本数: ");
-		JLabel lblSdThreshold= new JLabel("标准差筛选阈值: ");
-		JLabel lblClusterH= new JLabel("层次聚类剪枝H值: ");
-		JLabel lblPccOutAmount= new JLabel("模块间的需要计算的边数: ");
-		JLabel lblCores_1= new JLabel("CPU加速所使用的核心数: ");
+		lblCase = new JLabel("Case文件:");
+		lblControl = new JLabel("Control文件:");
+		lblPeriod= new JLabel("总时期数(Period): ");
+		lblPeriodSampleCount= new JLabel("每个时期样本数: ");
+		lblSdThreshold= new JLabel("标准差筛选阈值: ");
+		lblClusterH= new JLabel("层次聚类剪枝H值: ");
+		lblPccOutAmount= new JLabel("模块间的需要计算的边数: ");
+		lblCores= new JLabel("CPU加速所使用的核心数: ");
 		
 		txtCaseFile = new JTextField();
 		txtControlFile = new JTextField();
@@ -396,7 +563,7 @@ public class DNBGen extends JFrame {
 		txtPccOutAmount.setColumns(10);
 		txtCores.setColumns(10);
 		
-		JButton btnDnbgen = new JButton("生成DNB");
+		btnDnbgen = new JButton("生成DNB");
 		btnDnbgen.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -406,7 +573,7 @@ public class DNBGen extends JFrame {
 		
 		dnbGenLayout(pDNBGen, lblWorkSpace, lblCase, lblControl, lblPeriod,
 				lblPeriodSampleCount, lblSdThreshold, lblClusterH,
-				lblPccOutAmount, lblCores_1,
+				lblPccOutAmount, lblCores,
 				btnWorkSpace, btnCase, btnControl, btnDnbgen);
 	}
 
@@ -453,10 +620,10 @@ public class DNBGen extends JFrame {
 		TempVar.PERIOD_SAMPLE_COUNT = periodSampleCount;
 		TempVar.WORK_SPACE = workspace;
 		
-		removeOldFiles();
+//		removeOldFiles();
 		
 		StringBuffer gdmCmd = new StringBuffer();
-		gdmCmd.append(classPath).append("core/gdm4Par.R ")
+		gdmCmd.append("Rscript ").append(classPath).append("core").append(File.separator).append("gdm4Par.R ")
 				.append(" -p ").append(workspace)
 				.append("  --case.file.path  ").append(caseFilePath)
 				.append("  --period.count   ").append(periodCount)
@@ -468,8 +635,7 @@ public class DNBGen extends JFrame {
 				.append(" --pcc.out.amount  ").append(pccOutAmount)
 				.append(" --cores ").append(cores);
 		if (!controlFilePath.isEmpty()) {
-			gdmCmd.append("  --control.file.path  ").append(
-					controlFilePath);
+			gdmCmd.append("  --control.file.path  ").append(controlFilePath);
 		}
 
 		log.info("gdmCmd:" + gdmCmd.toString());
@@ -522,23 +688,24 @@ public class DNBGen extends JFrame {
 								.addGroup(gl_jpDNBGen.createSequentialGroup()
 									.addComponent(lblWorkSpace)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(txtWorkSpace, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE))
+									.addComponent(txtWorkSpace, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(btnWorkSpace))
 								.addGroup(gl_jpDNBGen.createSequentialGroup()
 									.addComponent(lblCase)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(txtCaseFile, 220, 220, 220))
+									.addComponent(txtCaseFile, 220, 220, 220)
+									.addGap(18)
+									.addComponent(btnCase))
 								.addGroup(gl_jpDNBGen.createSequentialGroup()
 									.addComponent(lblControl)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(txtControlFile, GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)))
-							.addGap(35)
-							.addGroup(gl_jpDNBGen.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnCase)
-								.addComponent(btnWorkSpace)
-								.addComponent(btnControl, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))
-							.addGap(217))
+									.addComponent(txtControlFile, GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)))
+							.addGap(18)
+							.addComponent(btnControl, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+							.addGap(234))
 						.addGroup(gl_jpDNBGen.createSequentialGroup()
-							.addGroup(gl_jpDNBGen.createParallelGroup(Alignment.TRAILING)
+							.addGroup(gl_jpDNBGen.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_jpDNBGen.createSequentialGroup()
 									.addGroup(gl_jpDNBGen.createParallelGroup(Alignment.LEADING, false)
 										.addGroup(gl_jpDNBGen.createSequentialGroup()
@@ -557,9 +724,9 @@ public class DNBGen extends JFrame {
 									.addGroup(gl_jpDNBGen.createParallelGroup(Alignment.LEADING)
 										.addGroup(gl_jpDNBGen.createSequentialGroup()
 											.addComponent(txtPeriodSampleCount, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.RELATED, 45, Short.MAX_VALUE))
-										.addComponent(txtClusterH, GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)))
-								.addGroup(Alignment.LEADING, gl_jpDNBGen.createSequentialGroup()
+											.addPreferredGap(ComponentPlacement.RELATED, 199, Short.MAX_VALUE))
+										.addComponent(txtClusterH, GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)))
+								.addGroup(gl_jpDNBGen.createSequentialGroup()
 									.addGroup(gl_jpDNBGen.createParallelGroup(Alignment.TRAILING)
 										.addComponent(btnDnbgen)
 										.addGroup(gl_jpDNBGen.createSequentialGroup()
@@ -567,10 +734,10 @@ public class DNBGen extends JFrame {
 											.addPreferredGap(ComponentPlacement.RELATED)
 											.addComponent(txtPccOutAmount, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)))
 									.addGap(40)
-									.addComponent(lblCores, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)))
-							.addGap(18)
-							.addComponent(txtCores, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-							.addGap(122))))
+									.addComponent(lblCores, GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(txtCores, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)))
+							.addGap(182))))
 		);
 		gl_jpDNBGen.setVerticalGroup(
 			gl_jpDNBGen.createParallelGroup(Alignment.LEADING)
@@ -588,8 +755,8 @@ public class DNBGen extends JFrame {
 					.addGap(18)
 					.addGroup(gl_jpDNBGen.createParallelGroup(Alignment.BASELINE)
 						.addComponent(txtControlFile, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnControl)
-						.addComponent(lblControl))
+						.addComponent(lblControl)
+						.addComponent(btnControl))
 					.addGap(18)
 					.addGroup(gl_jpDNBGen.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblPeriod)
@@ -611,7 +778,7 @@ public class DNBGen extends JFrame {
 						.addComponent(txtCores, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(45)
 					.addComponent(btnDnbgen)
-					.addContainerGap(353, Short.MAX_VALUE))
+					.addContainerGap(369, Short.MAX_VALUE))
 		);
 		jpDNBGen.setLayout(gl_jpDNBGen);
 	}

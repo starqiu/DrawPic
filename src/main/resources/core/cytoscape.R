@@ -5,8 +5,8 @@
 #' 
 #' 	
 
-library(foreach)
-library(doParallel)
+# library(foreach)
+# library(doParallel)
 
 BASE.PATH <- "/host/data/"
 # BASE.PATH <- "~/prog/apache-tomcat-8.0.17/webapps/DNBGen/WEB-INF/classes/"
@@ -210,7 +210,7 @@ gen.gdm.csv <- function(period){
 }
 
 main <- function(){
-  registerDoParallel(cores=CORES) 
+#   registerDoParallel(cores=CORES) 
   args <- commandArgs(TRUE)
   print(args)
   if ((length(args) %% 2 != 0) ){
