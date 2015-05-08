@@ -6,12 +6,12 @@
 #' 
 library(plyr)
 
-BASE.PATH <- "/host/data/"
+BASE.PATH <- "~/data/"
 # BASE.PATH <- "./"
-# CASE.FILE.PATH <- "/host/data//sourceData/liver_case_data.txt"
-# CONTROL.FILE.PATH <- "/host/data//sourceData/liver_control_data.txt"
-CASE.FILE.PATH <- NULL
-CONTROL.FILE.PATH <- NULL
+CASE.FILE.PATH <- "~/data//sourceData/liver_case_data.txt"
+CONTROL.FILE.PATH <- "~/data//sourceData/liver_control_data.txt"
+# CASE.FILE.PATH <- NULL
+# CONTROL.FILE.PATH <- NULL
 
 
 # FILE.NAME <- "GSE64538_labeled.txt"
